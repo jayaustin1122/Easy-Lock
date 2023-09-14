@@ -63,5 +63,14 @@ dependencies {
     //circular
     implementation("com.mikhaellopez:circularprogressbar:3.1.0")
     implementation ("pl.droidsonroids.gif:android-gif-drawable:1.2.27")
+    // dependency for circular ImageView
+    implementation ("de.hdodenhof:circleimageview:3.1.0")
 
+    //karumi to access other component of mobile
+    implementation ("com.karumi:dexter:6.2.2")
+
+    //glide
+    implementation ("com.github.bumptech.glide:glide:4.14.2")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.14.2")
+    //navigation
 }
