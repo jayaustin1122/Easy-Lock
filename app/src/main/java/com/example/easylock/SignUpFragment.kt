@@ -83,6 +83,7 @@ class SignUpFragment : Fragment() {
     private var fullname = ""
     private var address = ""
     private var userType = "member"
+    private var pin = ""
 
     private fun validateData() {
         val email = binding.etEmailSignUp.text.toString().trim()
@@ -163,10 +164,9 @@ class SignUpFragment : Fragment() {
         email = binding.etEmailSignUp.text.toString().trim()
         pass = binding.etPasswordSignUp.text.toString().trim()
         fullname = binding.etFullname.text.toString().trim()
-        address = binding.etPasscode.text.toString().trim()
+        pin = binding.etPasscode.text.toString().trim()
         val currentDate = getCurrentDate()
         val currentTime = getCurrentTime()
-        val timestamp = System.currentTimeMillis()
         val uid = auth.uid
 
         val user = AccountModel(
@@ -174,18 +174,18 @@ class SignUpFragment : Fragment() {
             email = email,
             password = pass,
             fullName = fullname,
-            address = address,
+            address = "",
             image = imageUrl,
             currentDate = currentDate,
             currentTime = currentTime,
-            id = "$timestamp",
             userType = "member",
-            RFID = rfidData
+            RFID = rfidData,
+            PIN = pin
         )
 
         try {
             database.getReference("Users")
-                .child(FirebaseAuth.getInstance().currentUser!!.uid)
+                .child(rfidData)
                 .setValue(user)
                 .addOnCompleteListener{ task ->
                     if (task.isSuccessful){

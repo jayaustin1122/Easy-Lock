@@ -9,7 +9,7 @@ data class AccountModel  (
     val image: String?,
     val currentDate: String?,
     val currentTime: String?,
-    val id: String?,
     val userType: String?,
-    val RFID : String?
+    val RFID : String?,
+    val PIN : String?
 )

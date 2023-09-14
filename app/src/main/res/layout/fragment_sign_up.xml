@@ -7,14 +7,15 @@
     tools:context=".SignUpFragment">
 
 
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout6"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="371dp"
         android:layout_height="wrap_content"
         android:elevation="10dp"
-        android:padding="2dp"
         android:hint="RFID"
+        android:padding="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -167,24 +168,24 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageView2"
-        android:layout_width="205dp"
-        android:layout_height="140dp"
-        android:layout_marginTop="50dp"
+        android:layout_width="146dp"
+        android:layout_height="126dp"
+        android:layout_marginTop="40dp"
         android:src="@drawable/profile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSignUp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
         android:backgroundTint="@color/blue"
         android:padding="10dp"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
-        android:id="@+id/btnSignUp"
         android:text="Sign Up"
-        android:layout_marginBottom="50dp"
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"

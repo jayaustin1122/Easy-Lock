@@ -66,4 +66,21 @@
             android:id="@+id/action_signUpFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/accountsFragment"
+        android:name="com.example.easylock.admin.tab.AccountsFragment"
+        android:label="AccountsFragment" >
+        <action
+            android:id="@+id/action_accountsFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editAccountsFragment"
+        android:name="com.example.easylock.admin.tab.accounts.EditAccountsFragment"
+        android:label="fragment_edit_accounts"
+        tools:layout="@layout/fragment_edit_accounts" >
+        <action
+            android:id="@+id/action_editAccountsFragment_to_accountsFragment"
+            app:destination="@id/accountsFragment" />
+    </fragment>
 </navigation>
