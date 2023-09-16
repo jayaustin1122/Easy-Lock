@@ -1,18 +1,18 @@
-package com.example.easylock
+package com.example.easylock.ui
 
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
+import android.text.Editable
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import com.example.easylock.R
 import com.example.easylock.databinding.FragmentSignUpBinding
 import com.example.easylock.model.AccountModel
 import com.google.firebase.auth.FirebaseAuth
@@ -24,6 +24,7 @@ import com.google.firebase.storage.FirebaseStorage
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
+import java.util.HashMap
 import java.util.TimeZone
 
 
@@ -53,6 +54,7 @@ class SignUpFragment : Fragment() {
         progressDialog = ProgressDialog(this.requireContext())
         progressDialog.setTitle("PLease wait")
         progressDialog.setCanceledOnTouchOutside(false)
+        loadUsersInfo()
 
         binding.imageView2.setOnClickListener {
             val intent = Intent()
@@ -81,21 +83,24 @@ class SignUpFragment : Fragment() {
     private var email = ""
     private var pass = ""
     private var fullname = ""
-    private var address = ""
     private var userType = "member"
     private var pin = ""
+    private var rfid = ""
 
     private fun validateData() {
         val email = binding.etEmailSignUp.text.toString().trim()
         val pass = binding.etPasswordSignUp.text.toString().trim()
         val fullname = binding.etFullname.text.toString().trim()
-        val address = binding.etPasscode.text.toString().trim()
+        val pinCode = binding.etPasscode.text.toString().trim()
+        val rfid = binding.etRfid.text.toString().trim()
 
         when {
             email.isEmpty() -> Toast.makeText(this.requireContext(), "Enter Your Email...", Toast.LENGTH_SHORT).show()
             pass.isEmpty() -> Toast.makeText(this.requireContext(), "Enter Your Password...", Toast.LENGTH_SHORT).show()
             fullname.isEmpty() -> Toast.makeText(this.requireContext(), "Enter Your Fullname...", Toast.LENGTH_SHORT).show()
-            address.isEmpty() -> Toast.makeText(this.requireContext(), "Enter Your Address...", Toast.LENGTH_SHORT).show()
+            pinCode.isEmpty() -> Toast.makeText(this.requireContext(), "Pin is Empty...", Toast.LENGTH_SHORT).show()
+            rfid.isEmpty() -> Toast.makeText(this.requireContext(), "Tap the Card...", Toast.LENGTH_SHORT).show()
+
             else -> createUserAccount()
         }
     }
@@ -103,43 +108,22 @@ class SignUpFragment : Fragment() {
         progressDialog.setMessage("Creating Account...")
         progressDialog.show()
 
-        auth.createUserWithEmailAndPassword(binding.etEmailSignUp.text.toString().trim(),binding.etPasswordSignUp.text.toString().trim())
+        auth.createUserWithEmailAndPassword(email,pass)
 
             .addOnSuccessListener {
                 // if user successfully created ()
-                getRFIDDataAndUploadImage()
+                uploadImage()
             }
             .addOnFailureListener { e ->
                 //if the user fialef creating account
                 progressDialog.dismiss()
-                Toast.makeText(this.requireContext(),"Failed Creating Account or ${e.message}",
+                Toast.makeText(this@SignUpFragment.requireContext(),"Failed Creating Account or ${e.message}",
                     Toast.LENGTH_SHORT).show()
             }
     }
-    private fun getRFIDDataAndUploadImage() {
-        val uid = auth.uid
-        val userRef = database.getReference("RFIDData") // Change to your actual path
 
-        userRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val rfidData = dataSnapshot.getValue(String::class.java)
-                if (rfidData != null) {
-                    uploadImage(rfidData)
-                } else {
-                    // Handle the case where RFID data is not available
-                    Toast.makeText(this@SignUpFragment.requireContext(), "RFID data not found", Toast.LENGTH_SHORT).show()
-                }
-            }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.w(TAG, "getRFIDData:onCancelled", databaseError.toException())
-                // Handle the case where an error occurred while retrieving RFID data
-                Toast.makeText(this@SignUpFragment.requireContext(), "Error retrieving RFID data", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    private fun uploadImage(rfidData: String,) {
+    private fun uploadImage() {
         progressDialog.setMessage("Uploading Image...")
         progressDialog.show()
         val uid = auth.uid
@@ -150,7 +134,7 @@ class SignUpFragment : Fragment() {
             if (it.isSuccessful){
                 reference.downloadUrl.addOnSuccessListener {task->
                     // Pass the RFID data to uploadInfo
-                    uploadInfo(task.toString(), rfidData)
+                    uploadInfo(task.toString())
                 }
             } else {
                 progressDialog.dismiss()
@@ -158,35 +142,37 @@ class SignUpFragment : Fragment() {
             }
         }
     }
-    private fun uploadInfo(imageUrl: String, rfidData: String) {
+    private fun uploadInfo(imageUrl: String) {
         progressDialog.setMessage("Saving Account...")
         progressDialog.show()
         email = binding.etEmailSignUp.text.toString().trim()
         pass = binding.etPasswordSignUp.text.toString().trim()
         fullname = binding.etFullname.text.toString().trim()
         pin = binding.etPasscode.text.toString().trim()
+        rfid = binding.etRfid.text.toString().trim()
         val currentDate = getCurrentDate()
         val currentTime = getCurrentTime()
         val uid = auth.uid
+        val timestamp = System.currentTimeMillis()
+        val hashMap : HashMap<String, Any?> = HashMap()
 
-        val user = AccountModel(
-            uid = uid,
-            email = email,
-            password = pass,
-            fullName = fullname,
-            address = "",
-            image = imageUrl,
-            currentDate = currentDate,
-            currentTime = currentTime,
-            userType = "member",
-            RFID = rfidData,
-            PIN = pin
-        )
+        hashMap["uid"] = uid
+        hashMap["email"] = email
+        hashMap["password"] = pass
+        hashMap["fullName"] = fullname
+        hashMap["image"] = imageUrl
+        hashMap["currentDate"] = currentDate
+        hashMap["currentTime"] = currentTime
+        hashMap["id"] = "$timestamp"
+        hashMap["userType"] = "member"
+        hashMap["RFID"] = rfid
+        hashMap["PIN"] = pin
+        hashMap["status"] = true
 
         try {
             database.getReference("Users")
-                .child(rfidData)
-                .setValue(user)
+                .child(FirebaseAuth.getInstance().currentUser!!.uid)
+                .setValue(hashMap)
                 .addOnCompleteListener{ task ->
                     if (task.isSuccessful){
                         progressDialog.dismiss()
@@ -216,5 +202,37 @@ class SignUpFragment : Fragment() {
         val currentDateObject = Date()
         val formatter = SimpleDateFormat("dd-MM-yyyy")
         return formatter.format(currentDateObject)
+    }
+    private fun loadUsersInfo() {
+        //reference
+    val userRef = database.getReference("RFIDData")
+
+    userRef.addValueEventListener(object : ValueEventListener{
+        override fun onDataChange(snapshot: DataSnapshot) {
+            //get user info
+            val address = "${snapshot.child("address").value}"
+            val currentDate = "${snapshot.child("currentDate").value}"
+            val currentTime = "${snapshot.child("currentTime").value}"
+            val email = "${snapshot.child("email").value}"
+            val fullName = "${snapshot.child("fullName").value}"
+            val id = "${snapshot.child("id").value}"
+            val image = "${snapshot.child("image").value}"
+            val password = "${snapshot.child("password").value}"
+            val uid = "${snapshot.child("uid").value}"
+            val userType = "${snapshot.child("userType").value}"
+            val rfid = "${snapshot.child("RFID").value}"
+
+            //set data
+            binding.etRfid.text = Editable.Factory.getInstance().newEditable(rfid)
+
+
+
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+
+        }
+
+    })
     }
 }

@@ -71,7 +71,7 @@ class AccountsAdapter: RecyclerView.Adapter<AccountsAdapter.ViewHolderAccounts> 
     }
     private fun moreOptions(model: AccountModel, holder: AccountsAdapter.ViewHolderAccounts) {
         //get id title
-        val accId = model.RFID
+        val accId = model.id
         val fullname = model.fullName
         val pass = model.password
         val image = model.image
@@ -128,7 +128,7 @@ class AccountsAdapter: RecyclerView.Adapter<AccountsAdapter.ViewHolderAccounts> 
     private fun deleteEvent(model: AccountModel, holder: AccountsAdapter.ViewHolderAccounts) {
         //id as the reference to delete
 
-        val id = model.RFID
+        val id = model.uid
 
         val dbRef = FirebaseDatabase.getInstance().getReference("Users")
         dbRef.child(id.toString())

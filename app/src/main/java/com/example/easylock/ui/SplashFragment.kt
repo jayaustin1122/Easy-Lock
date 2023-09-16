@@ -1,14 +1,17 @@
-package com.example.easylock
+package com.example.easylock.ui
 
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import com.example.easylock.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -22,6 +25,7 @@ class SplashFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val user = FirebaseAuth.getInstance().currentUser
         auth = FirebaseAuth.getInstance()
         Handler().postDelayed({
             if(onBoardingFinished()){
@@ -51,14 +55,18 @@ class SplashFragment : Fragment() {
                     override fun onDataChange(snapshot: DataSnapshot) {
 
                         val userType = snapshot.child("userType").value
+                        val status = snapshot.child("status").getValue(Boolean::class.java)
+                        val name = snapshot.child("fullName").value
+                        Log.d("statusActive", status.toString())
+                            if (userType == "member") {
+                                Toast.makeText(this@SplashFragment.requireContext(), "Welcome Back $name", Toast.LENGTH_SHORT).show()
+                                findNavController().navigate(R.id.action_loginFragment_to_userFragment)
 
-                        if (userType == "admin") {
-                            Toast.makeText(this@SplashFragment.requireContext(), "Login Successfully", Toast.LENGTH_SHORT).show()
-                            findNavController().navigate(R.id.action_splashFragment_to_adminFragment)
+                            } else if (userType == "admin") {
+                                Toast.makeText(this@SplashFragment.requireContext(), "Welcome Admin", Toast.LENGTH_SHORT).show()
+                                findNavController().navigate(R.id.action_loginFragment_to_adminFragment)
+                            }
 
-                        } else if (userType == "member") {
-                            findNavController().navigate(R.id.action_splashFragment_to_userFragment)
-                        }
                     }
 
                     override fun onCancelled(error: DatabaseError) {
@@ -69,4 +77,19 @@ class SplashFragment : Fragment() {
 
         }
     }
+    private fun showAccessDeniedDialog() {
+        val alertDialog = AlertDialog.Builder(requireContext())
+            .setTitle("Access Denied")
+            .setMessage("Your account does not have access. Please contact the admin.")
+            .setPositiveButton("OK") { dialog, _ ->
+                dialog.dismiss()
+                requireActivity().finish()
+            }
+            .create()
+
+        alertDialog.show()
+    }
+
+
+
 }

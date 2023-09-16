@@ -51,7 +51,7 @@ dependencies {
 
     implementation (platform("com.google.firebase:firebase-bom:31.2.0"))
     implementation("com.google.firebase:firebase-analytics-ktx")
-    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-auth:22.1.1")
     implementation("com.google.firebase:firebase-storage-ktx")
     implementation("com.google.firebase:firebase-database-ktx")
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
@@ -73,4 +73,5 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.14.2")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.14.2")
     //navigation
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
 }

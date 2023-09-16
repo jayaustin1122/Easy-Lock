@@ -1,5 +1,7 @@
-package com.example.easylock
+package com.example.easylock.ui
 
+import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.os.Handler
@@ -11,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
+import com.example.easylock.R
 import com.example.easylock.databinding.FragmentLoginBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -38,7 +41,6 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         auth = FirebaseAuth.getInstance()
-
         progressDialog = ProgressDialog(this.requireContext())
         progressDialog.setTitle("PLease wait")
         progressDialog.setCanceledOnTouchOutside(false)
@@ -87,7 +89,7 @@ class LoginFragment : Fragment() {
             Toast.makeText(this.requireContext(),"Email Invalid", Toast.LENGTH_SHORT).show()
         }
         else if (pass.isEmpty()){
-
+            Toast.makeText(this.requireContext(),"Password is Empty", Toast.LENGTH_SHORT).show()
         }
         else{
             loginUser()
@@ -117,18 +119,22 @@ class LoginFragment : Fragment() {
         val dbref = FirebaseDatabase.getInstance().getReference("Users")
         dbref.child(firebaseUser.uid)
             .addListenerForSingleValueEvent(object : ValueEventListener {
+                @SuppressLint("SuspiciousIndentation")
                 override fun onDataChange(snapshot: DataSnapshot) {
                     progressDialog.dismiss()
                     val userType = snapshot.child("userType").value
+                    val status = snapshot.child("status").getValue(Boolean::class.java)
+                    val name = snapshot.child("fullName").value
 
-                    if (userType == "member") {
-                        Toast.makeText(this@LoginFragment.requireContext(), "Login Successfully", Toast.LENGTH_SHORT).show()
-                        findNavController().navigate(R.id.action_loginFragment_to_userFragment)
+                        if (userType == "member") {
+                            Toast.makeText(this@LoginFragment.requireContext(), "Welcome $name", Toast.LENGTH_SHORT).show()
+                            findNavController().navigate(R.id.action_loginFragment_to_userFragment)
 
-                    } else if (userType == "admin") {
-                        Toast.makeText(this@LoginFragment.requireContext(), "Welcome Admin", Toast.LENGTH_SHORT).show()
-                        findNavController().navigate(R.id.action_loginFragment_to_adminFragment)
-                    }
+                        } else if (userType == "admin") {
+                            Toast.makeText(this@LoginFragment.requireContext(), "Welcome Admin", Toast.LENGTH_SHORT).show()
+                            findNavController().navigate(R.id.action_loginFragment_to_adminFragment)
+                        }
+
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -137,4 +143,20 @@ class LoginFragment : Fragment() {
 
             })
     }
+    private fun showAccessDeniedDialog() {
+        val alertDialog = AlertDialog.Builder(requireContext())
+            .setTitle("Access Denied")
+            .setMessage("Your account does not have access. Please contact the admin.")
+            .setPositiveButton("OK") { dialog, _ ->
+                dialog.dismiss()
+                requireActivity().finish()
+            }
+            .create()
+
+        alertDialog.show()
+    }
+
+
+
+
 }
