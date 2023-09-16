@@ -31,11 +31,10 @@ class HomeFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         binding.cardView3.setOnClickListener {
             auth.signOut()
-            FragmentUtils.navigateToFragment(
-                requireFragmentManager(),
-                R.id.fragmentContainerView,
-                LoginFragment()
-            )
+            findNavController().apply {
+                popBackStack(R.id.homeFragment, false) // Pop all fragments up to HomeFragment
+                navigate(R.id.loginFragment) // Navigate to LoginFragment
+            }
         }
     }
 
