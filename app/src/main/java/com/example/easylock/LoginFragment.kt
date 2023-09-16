@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.example.easylock.databinding.FragmentLoginBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -26,6 +27,7 @@ class LoginFragment : Fragment() {
     private var backPressTime = 0L
     private var doubleBackToExitPressedOnce = false
     private val handler = Handler()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -44,7 +46,11 @@ class LoginFragment : Fragment() {
         progressDialog.setCanceledOnTouchOutside(false)
         handler.postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
         binding.tvCreate.setOnClickListener {
-            findNavController().navigate(R.id.action_loginFragment_to_signUpFragment)
+            FragmentUtils.navigateToFragment(
+                requireFragmentManager(),
+                R.id.fragmentContainerView,
+                SignUpFragment()
+            )
         }
         binding.btnLogin.setOnClickListener {
             validateData()

@@ -60,16 +60,18 @@ class AccountsFragment : Fragment() {
                     //data as model
                     val model = data.getValue(AccountModel::class.java)
 
-                    // add to array
-                    accArrayList.add(model!!)
+                    // Check if the userType is "member"
+                    if (model?.userType == "member") {
+                        // add to array
+                        accArrayList.add(model!!)
+                    }
                 }
                 //set up adapter
-                adapter = AccountsAdapter(this@AccountsFragment.requireContext(),accArrayList)
+                adapter = AccountsAdapter(this@AccountsFragment.requireContext(), accArrayList)
                 //set to recycler
                 binding.adminEventRv.setHasFixedSize(true)
                 binding.adminEventRv.layoutManager = LinearLayoutManager(context)
                 binding.adminEventRv.adapter = adapter
-
             }
 
             override fun onCancelled(error: DatabaseError) {

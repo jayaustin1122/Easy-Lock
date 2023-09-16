@@ -66,15 +66,15 @@
         app:layout_constraintVertical_bias="0.711" />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView3"
+
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:layout_margin="10dp"
         app:cardCornerRadius="15dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
+            android:id="@+id/cardView3"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
@@ -87,14 +87,4 @@
             app:tint="@color/black" />
     </androidx.cardview.widget.CardView>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/bold"
-        android:text="LOGOUT"
-        android:textColor="@android:color/holo_red_light"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/cardView3"
-        app:layout_constraintEnd_toEndOf="@+id/cardView3"
-        app:layout_constraintStart_toStartOf="@+id/cardView3" />
 </androidx.constraintlayout.widget.ConstraintLayout>

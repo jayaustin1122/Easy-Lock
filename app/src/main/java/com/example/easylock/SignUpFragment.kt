@@ -2,11 +2,9 @@ package com.example.easylock
 
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,12 +12,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.easylock.databinding.FragmentSignUpBinding
-import com.example.easylock.model.AccountModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -93,19 +87,18 @@ class SignUpFragment : Fragment() {
         val fullname = binding.etFullname.text.toString().trim()
         val address = binding.etPasscode.text.toString().trim()
 
-        when {
-            email.isEmpty() -> Toast.makeText(this.requireContext(), "Enter Your Email...", Toast.LENGTH_SHORT).show()
-            pass.isEmpty() -> Toast.makeText(this.requireContext(), "Enter Your Password...", Toast.LENGTH_SHORT).show()
-            fullname.isEmpty() -> Toast.makeText(this.requireContext(), "Enter Your Fullname...", Toast.LENGTH_SHORT).show()
-            address.isEmpty() -> Toast.makeText(this.requireContext(), "Enter Your Address...", Toast.LENGTH_SHORT).show()
-            else -> createUserAccount()
+        // Validate user input
+        if (email.isEmpty() || pass.isEmpty() || fullname.isEmpty() || address.isEmpty()) {
+            Toast.makeText(requireContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show()
+        } else {
+            createUserAccount(email, pass)
         }
     }
-    private fun createUserAccount() {
+    private fun createUserAccount(email: String, pass: String) {
         progressDialog.setMessage("Creating Account...")
         progressDialog.show()
 
-        auth.createUserWithEmailAndPassword(binding.etEmailSignUp.text.toString().trim(),binding.etPasswordSignUp.text.toString().trim())
+        auth.createUserWithEmailAndPassword(email,pass)
 
             .addOnSuccessListener {
                 // if user successfully created ()

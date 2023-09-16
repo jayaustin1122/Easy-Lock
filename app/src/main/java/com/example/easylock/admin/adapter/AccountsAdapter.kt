@@ -55,8 +55,8 @@ class AccountsAdapter: RecyclerView.Adapter<AccountsAdapter.ViewHolderAccounts> 
         val date = model.currentDate
         val imageselected = model.image
 
-        holder.name.text = fullname
-        holder.id.text = id
+        holder.name.text = id
+        holder.id.text = fullname
         holder.date.text = date
         holder.time.text = time
         Glide.with(this@AccountsAdapter.context)
