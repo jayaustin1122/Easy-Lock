@@ -83,6 +83,9 @@ class SignUpFragment : Fragment() {
     private var fullname = ""
     private var address = ""
     private var userType = "member"
+    private var rfid = ""
+    private var pin = ""
+
 
     private fun validateData() {
         val email = binding.etEmailSignUp.text.toString().trim()
@@ -106,7 +109,7 @@ class SignUpFragment : Fragment() {
 
             .addOnSuccessListener {
                 // if user successfully created ()
-                getRFIDDataAndUploadImage()
+                uploadImage()
             }
             .addOnFailureListener { e ->
                 //if the user fialef creating account
@@ -115,30 +118,9 @@ class SignUpFragment : Fragment() {
                     Toast.LENGTH_SHORT).show()
             }
     }
-    private fun getRFIDDataAndUploadImage() {
-        val uid = auth.uid
-        val userRef = database.getReference("RFIDData") // Change to your actual path
 
-        userRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val rfidData = dataSnapshot.getValue(String::class.java)
-                if (rfidData != null) {
-                    uploadImage(rfidData)
-                } else {
-                    // Handle the case where RFID data is not available
-                    Toast.makeText(this@SignUpFragment.requireContext(), "RFID data not found", Toast.LENGTH_SHORT).show()
-                }
-            }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.w(TAG, "getRFIDData:onCancelled", databaseError.toException())
-                // Handle the case where an error occurred while retrieving RFID data
-                Toast.makeText(this@SignUpFragment.requireContext(), "Error retrieving RFID data", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    private fun uploadImage(rfidData: String,) {
+    private fun uploadImage() {
         progressDialog.setMessage("Uploading Image...")
         progressDialog.show()
         val uid = auth.uid
@@ -149,7 +131,7 @@ class SignUpFragment : Fragment() {
             if (it.isSuccessful){
                 reference.downloadUrl.addOnSuccessListener {task->
                     // Pass the RFID data to uploadInfo
-                    uploadInfo(task.toString(), rfidData)
+                    uploadInfo(task.toString())
                 }
             } else {
                 progressDialog.dismiss()
@@ -157,36 +139,37 @@ class SignUpFragment : Fragment() {
             }
         }
     }
-    private fun uploadInfo(imageUrl: String, rfidData: String) {
+    private fun uploadInfo(imageUrl: String) {
         progressDialog.setMessage("Saving Account...")
         progressDialog.show()
         email = binding.etEmailSignUp.text.toString().trim()
         pass = binding.etPasswordSignUp.text.toString().trim()
         fullname = binding.etFullname.text.toString().trim()
-        address = binding.etPasscode.text.toString().trim()
+        rfid = binding.etRfid.text.toString().trim()
+        pin = binding.etPasscode.text.toString().trim()
         val currentDate = getCurrentDate()
         val currentTime = getCurrentTime()
-        val timestamp = System.currentTimeMillis()
         val uid = auth.uid
+        val timestamp = System.currentTimeMillis()
+        val hashMap : HashMap<String, Any?> = HashMap()
 
-        val user = AccountModel(
-            uid = uid,
-            email = email,
-            password = pass,
-            fullName = fullname,
-            address = address,
-            image = imageUrl,
-            currentDate = currentDate,
-            currentTime = currentTime,
-            id = "$timestamp",
-            userType = "member",
-            RFID = rfidData
-        )
+        hashMap["uid"] = uid
+        hashMap["email"] = email
+        hashMap["password"] = pass
+        hashMap["fullName"] = fullname
+        hashMap["image"] = imageUrl
+        hashMap["currentDate"] = currentDate
+        hashMap["currentTime"] = currentTime
+        hashMap["id"] = "$timestamp"
+        hashMap["userType"] = "member"
+        hashMap["RFID"] = rfid
+        hashMap["PIN"] = pin
+        hashMap["status"] = true
 
         try {
             database.getReference("Users")
                 .child(FirebaseAuth.getInstance().currentUser!!.uid)
-                .setValue(user)
+                .setValue(hashMap)
                 .addOnCompleteListener{ task ->
                     if (task.isSuccessful){
                         progressDialog.dismiss()
