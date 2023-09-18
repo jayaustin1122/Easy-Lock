@@ -27,7 +27,7 @@
         android:fontFamily="@font/bold"
         android:text="@string/splash_title"
         android:textColor="@color/white"
-        android:textSize="50sp"
+        android:textSize="45sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"

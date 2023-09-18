@@ -1,13 +1,14 @@
 {
   "project_info": {
     "project_number": "242120684856",
+    "firebase_url": "https://easy-lock-c505a-default-rtdb.firebaseio.com",
     "project_id": "easy-lock-c505a",
     "storage_bucket": "easy-lock-c505a.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:242120684856:android:75f4b58d5319caf8b33dcd",
+        "mobilesdk_app_id": "1:242120684856:android:eb7ef3e403ba8dd0b33dcd",
         "android_client_info": {
           "package_name": "com.example.easylock"
         }
