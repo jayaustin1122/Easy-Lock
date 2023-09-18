@@ -3,11 +3,13 @@ package com.example.easylock
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.os.Handler
+import android.transition.TransitionInflater
 import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.NavHostFragment
@@ -40,17 +42,14 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         auth = FirebaseAuth.getInstance()
-
         progressDialog = ProgressDialog(this.requireContext())
         progressDialog.setTitle("PLease wait")
         progressDialog.setCanceledOnTouchOutside(false)
         handler.postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
         binding.tvCreate.setOnClickListener {
-            FragmentUtils.navigateToFragment(
-                requireFragmentManager(),
-                R.id.fragmentContainerView,
-                SignUpFragment()
-            )
+            findNavController().apply {
+                navigate(R.id.signUpFragment) // Navigate to LoginFragment
+            }
         }
         binding.btnLogin.setOnClickListener {
             validateData()
@@ -129,11 +128,17 @@ class LoginFragment : Fragment() {
 
                     if (userType == "member") {
                         Toast.makeText(this@LoginFragment.requireContext(), "Login Successfully", Toast.LENGTH_SHORT).show()
-                        findNavController().navigate(R.id.action_loginFragment_to_userFragment)
+                        findNavController().apply {
+                            popBackStack(R.id.loginFragment, false) // Pop all fragments up to HomeFragment
+                            navigate(R.id.userFragment) // Navigate to LoginFragment
+                        }
 
                     } else if (userType == "admin") {
                         Toast.makeText(this@LoginFragment.requireContext(), "Welcome Admin", Toast.LENGTH_SHORT).show()
-                        findNavController().navigate(R.id.action_loginFragment_to_adminFragment)
+                        findNavController().apply {
+                            popBackStack(R.id.loginFragment, false) // Pop all fragments up to HomeFragment
+                            navigate(R.id.adminFragment) // Navigate to LoginFragment
+                        }
                     }
                 }
 

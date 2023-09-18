@@ -55,7 +55,9 @@ class SignUpFragment : Fragment() {
             startActivityForResult(intent,1)
         }
         binding.btnBack.setOnClickListener {
-            findNavController().navigate(R.id.action_signUpFragment_to_loginFragment)
+            findNavController().apply {
+                navigate(R.id.loginFragment) // Navigate to LoginFragment
+            }
         }
         binding.btnSignUp.setOnClickListener {
             validateData()
@@ -166,7 +168,10 @@ class SignUpFragment : Fragment() {
                 .addOnCompleteListener{ task ->
                     if (task.isSuccessful){
                         progressDialog.dismiss()
-                        findNavController().navigate(R.id.action_signUpFragment_to_loginFragment)
+                        findNavController().apply {
+                            popBackStack(R.id.signUpFragment, false) // Pop all fragments up to HomeFragment
+                            navigate(R.id.loginFragment) // Navigate to LoginFragment
+                        }
                         Toast.makeText(this.requireContext(),"Account Created", Toast.LENGTH_SHORT).show()
                     } else {
                         Toast.makeText(this.requireContext(), task.exception!!.message, Toast.LENGTH_SHORT).show()

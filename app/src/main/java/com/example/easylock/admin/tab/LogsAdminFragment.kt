@@ -47,6 +47,7 @@ class LogsAdminFragment : Fragment() {
         progressDialog.setTitle("PLease wait")
         progressDialog.setCanceledOnTouchOutside(false)
         getLogs()
+
     }
 
     private fun getLogs() {
@@ -66,7 +67,7 @@ class LogsAdminFragment : Fragment() {
                     logsArrayList.add(model!!)
                 }
                 //set up adapter
-                adapter = LogsAdapter(this@LogsAdminFragment.requireContext(), logsArrayList)
+                adapter = LogsAdapter(this@LogsAdminFragment.requireContext().applicationContext, logsArrayList)
                 //set to recycler
                 binding.adminEventRv.setHasFixedSize(true)
                 binding.adminEventRv.layoutManager = LinearLayoutManager(context)
