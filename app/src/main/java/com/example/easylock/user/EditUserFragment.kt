@@ -1,4 +1,4 @@
-package com.example.easylock.admin.tab.accounts
+package com.example.easylock.user
 
 import android.app.ProgressDialog
 import android.content.Intent
@@ -12,63 +12,41 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.easylock.R
-import com.example.easylock.databinding.FragmentEditAccountsBinding
+import com.example.easylock.databinding.FragmentEditUserBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import java.util.Date
 
 
-class EditAccountsFragment : Fragment() {
-
-    private lateinit var binding : FragmentEditAccountsBinding
-    var rfid = ""
+class EditUserFragment : Fragment() {
+    private lateinit var binding : FragmentEditUserBinding
+    private lateinit var auth : FirebaseAuth
     var fullname = ""
     var pass = ""
     var image = ""
-    var email = ""
     var pin = ""
     private lateinit var progressDialog: ProgressDialog
     private lateinit var selectedImage : Uri
-    private lateinit var auth : FirebaseAuth
     private lateinit var storage : FirebaseStorage
     private lateinit var database : FirebaseDatabase
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentEditAccountsBinding.inflate(layoutInflater)
+        binding = FragmentEditUserBinding.inflate(layoutInflater)
         // Inflate the layout for this fragment
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        progressDialog = ProgressDialog(this@EditAccountsFragment.requireContext())
-        progressDialog.setTitle("PLease wait")
-        progressDialog.setCanceledOnTouchOutside(false)
-
-        //get id to edit events
-        rfid = arguments?.getString("id").toString()
-        fullname = arguments?.getString("fullname").toString()
-        pass = arguments?.getString("pass").toString()
-        image = arguments?.getString("image").toString()
-        email = arguments?.getString("email").toString()
-        pin = arguments?.getString("pin").toString()
-
-        Glide.with(this)
-            .load(image)
-            .into(binding.imageView)
-
-        binding.etName.setText(fullname)
-        binding.etPass.setText(pass)
-        binding.pinCode.setText(pin)
-        binding.tvID.setText(rfid)
-        binding.tvEmail.setText(email)
-        binding.btnUpdate.setOnClickListener {
+        loadUsersInfo()
+        binding.btnUpdate.setOnClickListener{
             updateData()
-
         }
         binding.imageView.setOnClickListener {
 
@@ -79,16 +57,6 @@ class EditAccountsFragment : Fragment() {
 
         }
     }
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (data != null){
-            if (data.data != null){
-                selectedImage = data.data!!
-                binding.imageView.setImageURI(selectedImage)
-            }
-        }
-    }
     private fun updateData() {
         //get data
         fullname = binding.etName.text.toString()
@@ -96,19 +64,26 @@ class EditAccountsFragment : Fragment() {
         pin = binding.pinCode.text.toString()
 
         if (fullname.isEmpty()) {
-            Toast.makeText(this@EditAccountsFragment.requireContext(), "Empty fields are not allowed", Toast.LENGTH_SHORT).show()
-        }
-        else if (pass.isEmpty()) {
-            Toast.makeText(this@EditAccountsFragment.requireContext(), "Empty fields are not allowed", Toast.LENGTH_SHORT).show()
-        }
-        else if (pin.isEmpty()) {
-            Toast.makeText(this@EditAccountsFragment.requireContext(), "Empty fields are not allowed", Toast.LENGTH_SHORT).show()
-        }
-        else{
+            Toast.makeText(
+                this@EditUserFragment.requireContext(),
+                "Empty fields are not allowed",
+                Toast.LENGTH_SHORT
+            ).show()
+        } else if (pass.isEmpty()) {
+            Toast.makeText(
+                this@EditUserFragment.requireContext(),
+                "Empty fields are not allowed",
+                Toast.LENGTH_SHORT
+            ).show()
+        } else if (pin.isEmpty()) {
+            Toast.makeText(
+                this@EditUserFragment.requireContext(),
+                "Empty fields are not allowed",
+                Toast.LENGTH_SHORT
+            ).show()
+        } else {
             uploadImage()
         }
-
-
     }
     private fun uploadImage() {
         progressDialog.setMessage("Uploading New Image...")
@@ -142,14 +117,51 @@ class EditAccountsFragment : Fragment() {
             .updateChildren(hashMap)
             .addOnSuccessListener {
                 progressDialog.dismiss()
-                Toast.makeText(this@EditAccountsFragment.requireContext(), "Account Updated", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@EditUserFragment.requireContext(), "Account Updated", Toast.LENGTH_SHORT).show()
                 findNavController().navigate(R.id.action_editAccountsFragment_to_accountsFragment)
             }
             .addOnFailureListener { e ->
                 progressDialog.dismiss()
-                Toast.makeText(this@EditAccountsFragment.requireContext(), "Unable to update due to ${e.message}", Toast.LENGTH_SHORT)
+                Toast.makeText(this@EditUserFragment.requireContext(), "Unable to update due to ${e.message}", Toast.LENGTH_SHORT)
                     .show()
             }
 
+    }
+    private fun loadUsersInfo() {
+        //reference
+        val ref = FirebaseDatabase.getInstance().getReference("Users")
+        ref.child(auth.uid!!)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    //get user info
+                    val rfid = "${snapshot.child("RFID").value}"
+                    val currentDate = "${snapshot.child("currentDate").value}"
+                    val currentTime = "${snapshot.child("currentTime").value}"
+                    val email = "${snapshot.child("email").value}"
+                    val fullName = "${snapshot.child("fullName").value}"
+                    val id = "${snapshot.child("id").value}"
+                    val image = "${snapshot.child("image").value}"
+                    val password = "${snapshot.child("password").value}"
+                    val pin = "${snapshot.child("PIN").value}"
+                    val userType = "${snapshot.child("userType").value}"
+
+
+                    binding.etName.setText(fullName)
+                    binding.etPass.setText(password)
+                    binding.pinCode.setText(pin)
+                    binding.tvID.text = rfid
+                    binding.tvEmail.text = email
+                    Glide.with(requireActivity())
+                        .load(image)
+                        .into(binding.imageView)
+
+
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+
+            })
     }
 }

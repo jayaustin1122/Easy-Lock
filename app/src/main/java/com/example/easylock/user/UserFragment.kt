@@ -34,6 +34,17 @@ class UserFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         checkUser()
         loadUsersInfo()
+        binding.mainProfile.setOnClickListener {
+            findNavController().apply {
+                navigate(R.id.editAccountsFragment)
+            }
+        }
+        binding.btnLogoutUser.setOnClickListener {
+            findNavController().apply {
+                popBackStack(R.id.homeFragment, false) // Pop all fragments up to HomeFragment
+                navigate(R.id.loginFragment) // Navigate to LoginFragment
+            }
+        }
     }
     private fun checkUser() {
 
