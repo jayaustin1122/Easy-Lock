@@ -28,6 +28,10 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/regular"
             android:inputType="text"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:lines="1"
             android:scrollbars="horizontal" />
 
