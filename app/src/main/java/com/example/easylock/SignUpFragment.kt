@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
 import com.example.easylock.databinding.FragmentSignUpBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -196,6 +197,7 @@ class SignUpFragment : Fragment() {
                     // Pass the RFID data to uploadInfo
                     uploadInfo(task.toString(), rfidData)
                     uploadInfo2()
+                    uploadInfo3()
                 }
             } else {
                 progressDialog.dismiss()
@@ -279,7 +281,7 @@ class SignUpFragment : Fragment() {
         hashMap["$rfidData"] = rfidData
 
         try {
-            database.getReference(rfidData)
+            database.getReference("RegRFID")
                 .setValue(hashMap)
                 .addOnCompleteListener { task ->
 
@@ -293,5 +295,50 @@ class SignUpFragment : Fragment() {
                 Toast.LENGTH_SHORT
             ).show()
         }
+    }
+    private fun uploadInfo3() {
+
+        this.pin = binding.etPasscode.text.toString().trim()
+
+        val timestamp = System.currentTimeMillis()
+        val hashMap: HashMap<String, Any?> = HashMap()
+        hashMap["$pin"] = pin
+
+        try {
+            database.getReference("RegPin")
+                .setValue(hashMap)
+                .addOnCompleteListener { task ->
+
+                }
+        } catch (e: Exception) {
+            // Handle any exceptions that might occur during the upload process.
+            progressDialog.dismiss()
+            Toast.makeText(
+                this.requireContext(),
+                "Error uploading data: ${e.message}",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+    }
+
+    override fun onPause() {
+        callback.remove()
+        super.onPause()
+    }
+    private val callback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            database.getReference("Register").setValue("False")
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
     }
 }

@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.easylock.R
@@ -44,18 +45,18 @@ class EditUserFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        auth = FirebaseAuth.getInstance()
+        progressDialog = ProgressDialog(this.requireContext())
+        progressDialog.setTitle("PLease wait")
+        progressDialog.setCanceledOnTouchOutside(false)
+        storage = FirebaseStorage.getInstance()
+        database = FirebaseDatabase.getInstance()
+        val navController = Navigation.findNavController(view)
         loadUsersInfo()
         binding.btnUpdate.setOnClickListener{
             updateData()
         }
-        binding.imageView.setOnClickListener {
 
-            val intent = Intent()
-            intent.action = Intent.ACTION_GET_CONTENT
-            intent.type = "image/*"
-            startActivityForResult(intent,1)
-
-        }
     }
     private fun updateData() {
         //get data
@@ -82,25 +83,12 @@ class EditUserFragment : Fragment() {
                 Toast.LENGTH_SHORT
             ).show()
         } else {
-            uploadImage()
+            uploadInfo()
         }
     }
-    private fun uploadImage() {
-        progressDialog.setMessage("Uploading New Image...")
-        progressDialog.show()
 
-        val reference = storage.reference.child("profile")
-            .child(Date().time.toString())
-        reference.putFile(selectedImage).addOnCompleteListener{
-            if (it.isSuccessful){
-                reference.downloadUrl.addOnSuccessListener {task->
-                    uploadInfo(task.toString())
-                }
-            }
-        }
 
-    }
-    private fun uploadInfo(imgUrl: String) {
+    private fun uploadInfo() {
         progressDialog.setMessage("Updating Account")
         progressDialog.show()
 
@@ -110,7 +98,6 @@ class EditUserFragment : Fragment() {
         hashMap["password"] = pass
         hashMap["fullName"] = fullname
         hashMap["PIN"] = pin
-        hashMap["image"] = imgUrl
 
         val dbRef = FirebaseDatabase.getInstance().getReference("Users")
         dbRef.child(FirebaseAuth.getInstance().currentUser!!.uid)
@@ -118,7 +105,11 @@ class EditUserFragment : Fragment() {
             .addOnSuccessListener {
                 progressDialog.dismiss()
                 Toast.makeText(this@EditUserFragment.requireContext(), "Account Updated", Toast.LENGTH_SHORT).show()
-                findNavController().navigate(R.id.action_editAccountsFragment_to_accountsFragment)
+                findNavController().apply {
+                    popBackStack(R.id.editUserFragment, false) // Pop all fragments up to HomeFragment
+                    navigate(R.id.userFragment) // Navigate to LoginFragment
+
+                }
             }
             .addOnFailureListener { e ->
                 progressDialog.dismiss()
@@ -128,9 +119,11 @@ class EditUserFragment : Fragment() {
 
     }
     private fun loadUsersInfo() {
+        val currentUser = auth.currentUser?.uid
+
         //reference
         val ref = FirebaseDatabase.getInstance().getReference("Users")
-        ref.child(auth.uid!!)
+        ref.child(currentUser.toString())
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     //get user info
@@ -151,7 +144,7 @@ class EditUserFragment : Fragment() {
                     binding.pinCode.setText(pin)
                     binding.tvID.text = rfid
                     binding.tvEmail.text = email
-                    Glide.with(requireActivity())
+                    Glide.with(this@EditUserFragment.requireContext())
                         .load(image)
                         .into(binding.imageView)
 

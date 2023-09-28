@@ -23,4 +23,8 @@
         android:name="com.example.easylock.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" />
+    <fragment
+        android:id="@+id/editUserFragment2"
+        android:name="com.example.easylock.user.EditUserFragment"
+        android:label="EditUserFragment" />
 </navigation>

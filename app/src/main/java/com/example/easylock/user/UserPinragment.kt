@@ -1,11 +1,13 @@
 package com.example.easylock.user
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import com.example.easylock.R
 import com.example.easylock.databinding.FragmentUserPinragmentBinding
 import com.google.android.material.snackbar.Snackbar
@@ -14,6 +16,10 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.TimeZone
 
 
 class UserPinragment : Fragment() {
@@ -76,6 +82,7 @@ class UserPinragment : Fragment() {
             getPinToUsers()
         }
     }
+
     private fun getPinToUsers() {
         val enteredPin = binding.etRfid.text.toString()
         val currentUser = auth.currentUser
@@ -92,12 +99,12 @@ class UserPinragment : Fragment() {
                         binding.etRfid.text?.clear()
                         database.getReference("Lock").setValue("Open")
                         Snackbar.make(binding.root, "Door is Open", Snackbar.LENGTH_SHORT).show()
-
+                        uploadInfo2()
+                        uploadInfoMyLogs()
                         // open door lock
                     } else {
                         // PINs don't match, handle accordingly
-                        Toast.makeText(this@UserPinragment.requireContext(),"Pin Not Found Or Empty",
-                            Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@UserPinragment.requireContext(),"Pin Not Found Or Empty",Toast.LENGTH_SHORT).show()
                     }
                 }
 
@@ -105,6 +112,49 @@ class UserPinragment : Fragment() {
                     // Handle error
                 }
             })
+        }
+    }
+
+    private fun getCurrentTime(): String {
+        val tz = TimeZone.getTimeZone("GMT+08:00")
+        val c = Calendar.getInstance(tz)
+        val hours = String.format("%02d", c.get(Calendar.HOUR))
+        val minutes = String.format("%02d", c.get(Calendar.MINUTE))
+        return "$hours:$minutes"
+    }
+
+
+    @SuppressLint("SimpleDateFormat")
+    private fun getCurrentDate(): String {
+        val currentDateObject = Date()
+        val formatter = SimpleDateFormat(   "dd-MM-yyyy")
+        return formatter.format(currentDateObject)
+    }
+
+    private fun uploadInfo2() {
+
+        val rfidData = binding.sampleHolder.text.toString()
+
+        val timestamp = System.currentTimeMillis()
+        val hashMap: HashMap<String, Any?> = HashMap()
+        hashMap["RFID"] = rfidData
+        hashMap["time"] = getCurrentTime()
+
+        try {
+            database.getReference("Logs")
+                .child(timestamp.toString())
+                .setValue(hashMap)
+                .addOnCompleteListener { task ->
+
+                }
+        } catch (e: Exception) {
+            // Handle any exceptions that might occur during the upload process.
+
+            Toast.makeText(
+                this.requireContext(),
+                "Error uploading data: ${e.message}",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
     private fun loadUsersInfo() {
@@ -126,5 +176,38 @@ class UserPinragment : Fragment() {
                 }
 
             })
+    }
+    private fun uploadInfoMyLogs() {
+        val rfidData = binding.sampleHolder.text.toString()
+        val timestamp = System.currentTimeMillis()
+
+        val hashMap: HashMap<String, Any?> = HashMap()
+        hashMap["RFID"] = rfidData
+        hashMap["time"] = getCurrentTime()
+
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser != null) {
+            val userUid = currentUser.uid
+
+            try {
+                // Save data under the current user's "MyLogs" node with timestamp as a child node.
+                database.getReference("Users")
+                    .child(userUid)
+                    .child("MyLogs")
+                    .child(timestamp.toString())
+                    .setValue(hashMap)
+                    .addOnCompleteListener { task ->
+                        // Handle completion if needed.
+                    }
+            } catch (e: Exception) {
+                // Handle any exceptions that might occur during the upload process.
+                Toast.makeText(
+                    this.requireContext(),
+                    "Error uploading data: ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+        // Handle the case where the currentUser is null if it can occur in your app.
     }
 }
