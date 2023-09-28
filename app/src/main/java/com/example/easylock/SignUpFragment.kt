@@ -95,15 +95,20 @@ class SignUpFragment : Fragment() {
             startActivityForResult(intent,1)
         }
         binding.btnBack.setOnClickListener {
+            database.getReference("Register").setValue("False")
             findNavController().apply {
                 navigate(R.id.loginFragment) // Navigate to LoginFragment
             }
         }
         binding.btnSignUp.setOnClickListener {
             validateData()
+
         }
 
     }
+
+
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -235,9 +240,11 @@ class SignUpFragment : Fragment() {
                     findNavController().apply {
                         popBackStack(R.id.signUpFragment, false) // Pop all fragments up to HomeFragment
                         navigate(R.id.loginFragment) // Navigate to LoginFragment
+                        database.getReference("Register").setValue("False")
                     }
                     Toast.makeText(this.requireContext(),"Account Created", Toast.LENGTH_SHORT).show()
-                    database.getReference("RFID").removeValue()
+                    database.getReference("RFID").setValue("")
+
                 } else {
                     Toast.makeText(this.requireContext(), task.exception!!.message, Toast.LENGTH_SHORT).show()
                 }
@@ -269,11 +276,10 @@ class SignUpFragment : Fragment() {
 
         val timestamp = System.currentTimeMillis()
         val hashMap: HashMap<String, Any?> = HashMap()
-        hashMap["RFID"] = rfidData
+        hashMap["$rfidData"] = rfidData
 
         try {
-            database.getReference("RegRFID")
-                .child(rfidData)
+            database.getReference(rfidData)
                 .setValue(hashMap)
                 .addOnCompleteListener { task ->
 

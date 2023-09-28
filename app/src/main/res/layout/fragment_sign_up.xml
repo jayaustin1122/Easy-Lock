@@ -143,6 +143,7 @@
             android:fontFamily="@font/regular"
             android:inputType="number"
             android:lines="1"
+            android:maxLength="4"
             android:scrollbars="horizontal" />
 
     </com.google.android.material.textfield.TextInputLayout>

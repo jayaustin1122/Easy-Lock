@@ -23,6 +23,7 @@ import com.google.firebase.database.ValueEventListener
 
 
 class LoginFragment : Fragment() {
+    private lateinit var database : FirebaseDatabase
     private lateinit var binding : FragmentLoginBinding
     private lateinit var auth : FirebaseAuth
     private lateinit var progressDialog : ProgressDialog
@@ -42,17 +43,20 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         auth = FirebaseAuth.getInstance()
+        database = FirebaseDatabase.getInstance()
         progressDialog = ProgressDialog(this.requireContext())
         progressDialog.setTitle("PLease wait")
         progressDialog.setCanceledOnTouchOutside(false)
         handler.postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
         binding.tvCreate.setOnClickListener {
+            database.getReference("Register").setValue("True")
             findNavController().apply {
                 navigate(R.id.signUpFragment) // Navigate to LoginFragment
             }
         }
         binding.btnLogin.setOnClickListener {
             validateData()
+
         }
     }
     override fun onDestroyView() {

@@ -13,6 +13,10 @@ import com.example.easylock.databinding.AccountItemRowBinding
 import com.example.easylock.databinding.LogsItemRowBinding
 import com.example.easylock.model.AccountModel
 import com.example.easylock.model.LogsModel
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class LogsAdapter: RecyclerView.Adapter<LogsAdapter.ViewHolderLogs> {
 
@@ -20,6 +24,7 @@ class LogsAdapter: RecyclerView.Adapter<LogsAdapter.ViewHolderLogs> {
     private lateinit var binding : LogsItemRowBinding
     private val context : Context
     var logsArrayList : ArrayList<LogsModel>
+
 
     constructor(context: Context, logsArrayList: ArrayList<LogsModel>){
         this.context = context
@@ -48,12 +53,26 @@ class LogsAdapter: RecyclerView.Adapter<LogsAdapter.ViewHolderLogs> {
         val date = model.date
         val rfid = model.RFID
 
-        holder.rfid.text = rfid
         holder.date.text = date
         holder.time.text = time
-
-
+        getUserData(rfid) { fullName ->
+            holder.rfid.text = fullName
+        }
 
     }
+    private fun getUserData(rfid: String, onUserDataReceived: (String) -> Unit) {
+        val dbRef = FirebaseDatabase.getInstance().getReference("Users").child(rfid)
+        dbRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val userModel = snapshot.getValue(AccountModel::class.java)
+                userModel?.let {
+                    onUserDataReceived(it.fullName)
+                }
+            }
 
+            override fun onCancelled(error: DatabaseError) {
+                // Handle error
+            }
+        })
+    }
 }

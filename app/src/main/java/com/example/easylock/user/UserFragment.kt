@@ -40,9 +40,11 @@ class UserFragment : Fragment() {
             }
         }
         binding.btnLogoutUser.setOnClickListener {
+            auth.signOut()
             findNavController().apply {
                 popBackStack(R.id.homeFragment, false) // Pop all fragments up to HomeFragment
                 navigate(R.id.loginFragment) // Navigate to LoginFragment
+
             }
         }
     }
