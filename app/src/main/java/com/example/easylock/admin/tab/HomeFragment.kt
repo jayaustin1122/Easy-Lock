@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.easylock.R
 import com.example.easylock.databinding.FragmentHomeBinding
-import com.example.easylock.model.LogEntry
+
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot

@@ -27,7 +27,7 @@ class LogsAdapter: RecyclerView.Adapter<LogsAdapter.ViewHolderLogs> {
     }
 
     inner class ViewHolderLogs(itemView: View): RecyclerView.ViewHolder(itemView){
-        var name : TextView = binding.tvID
+        var rfid : TextView = binding.tvID
         var image : ImageView = binding.imgPicture
         var date : TextView = binding.tvDate
         var time : TextView = binding.textViewNoteTime
@@ -44,17 +44,13 @@ class LogsAdapter: RecyclerView.Adapter<LogsAdapter.ViewHolderLogs> {
     override fun onBindViewHolder(holder: LogsAdapter.ViewHolderLogs, position: Int) {
         //get data
         val model = logsArrayList[position]
-        val fullname = model.fullName
-        val time = model.currentTime
-        val date = model.currentDate
-        val imageselected = model.image
+        val time = model.time
+        val date = model.date
+        val rfid = model.RFID
 
-        holder.name.text = fullname
+        holder.rfid.text = rfid
         holder.date.text = date
         holder.time.text = time
-        Glide.with(this@LogsAdapter.context)
-            .load(imageselected)
-            .into(holder.image)
 
 
 
