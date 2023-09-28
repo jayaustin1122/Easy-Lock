@@ -127,12 +127,14 @@ class SignUpFragment : Fragment() {
         val pass = binding.etPasswordSignUp.text.toString().trim()
         val fullname = binding.etFullname.text.toString().trim()
         val address = binding.etPasscode.text.toString().trim()
+        val rfid = binding.etRfid.text.toString().trim()
 
         when {
             email.isEmpty() -> Toast.makeText(this.requireContext(), "Enter Your Email...", Toast.LENGTH_SHORT).show()
             pass.isEmpty() -> Toast.makeText(this.requireContext(), "Enter Your Password...", Toast.LENGTH_SHORT).show()
             fullname.isEmpty() -> Toast.makeText(this.requireContext(), "Enter Your Fullname...", Toast.LENGTH_SHORT).show()
             address.isEmpty() -> Toast.makeText(this.requireContext(), "Enter Your Address...", Toast.LENGTH_SHORT).show()
+            rfid.isEmpty()-> Toast.makeText(this.requireContext(),"Tap Your Card",Toast.LENGTH_SHORT).show()
             else -> createUserAccount()
         }
     }
@@ -188,6 +190,7 @@ class SignUpFragment : Fragment() {
                 reference.downloadUrl.addOnSuccessListener {task->
                     // Pass the RFID data to uploadInfo
                     uploadInfo(task.toString(), rfidData)
+                    uploadInfo2()
                 }
             } else {
                 progressDialog.dismiss()
@@ -257,7 +260,32 @@ class SignUpFragment : Fragment() {
     @SuppressLint("SimpleDateFormat")
     private fun getCurrentDate(): String {
         val currentDateObject = Date()
-        val formatter = SimpleDateFormat("dd-MM-yyyy")
+        val formatter = SimpleDateFormat(   "dd-MM-yyyy")
         return formatter.format(currentDateObject)
+    }
+    private fun uploadInfo2() {
+
+        this.rfidData = binding.etRfid.text.toString().trim()
+
+        val timestamp = System.currentTimeMillis()
+        val hashMap: HashMap<String, Any?> = HashMap()
+        hashMap["RFID"] = rfidData
+
+        try {
+            database.getReference("RegRFID")
+                .child(rfidData)
+                .setValue(hashMap)
+                .addOnCompleteListener { task ->
+
+                }
+        } catch (e: Exception) {
+            // Handle any exceptions that might occur during the upload process.
+            progressDialog.dismiss()
+            Toast.makeText(
+                this.requireContext(),
+                "Error uploading data: ${e.message}",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 }

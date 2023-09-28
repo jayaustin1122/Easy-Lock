@@ -8,62 +8,284 @@
     android:background="@color/blue"
     android:padding="30dp">
 
-    <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/gifImageView"
-        android:layout_width="214dp"
-        android:layout_height="158dp"
-        android:src="@drawable/splash"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.009" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+    <androidx.cardview.widget.CardView
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/bold"
-        android:text="@string/splash_title"
-        android:textColor="@color/white"
-        android:textSize="45sp"
+        app:cardCornerRadius="10dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/cardView4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout6"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:backgroundTint="@android:color/transparent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@color/white"
+            android:hint="PIN"
+            app:layout_constraintBottom_toTopOf="@+id/cardView4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etRfid"
+                android:backgroundTint="@android:color/transparent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:fontFamily="@font/regular"
+                android:inputType="number"
+                android:lines="1"
+                android:maxLength="4"
+                android:scrollbars="horizontal" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="130dp"
+        app:cardCornerRadius="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gifImageView" />
-
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/bold"
-        android:text="Switch"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="40sp"
-        app:layout_constraintBottom_toTopOf="@+id/materialButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.733"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <com.google.android.material.button.MaterialButton
-
-        android:id="@+id/materialButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
-        android:fontFamily="@font/bold"
-        android:text="On"
-        android:textColor="@color/blue"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.266"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.711" />
+        app:layout_constraintVertical_bias="0.5">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/keypadButton1"
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    android:text="1"
+                    android:textColor="@color/black"
+                    android:textSize="24sp"
+                    app:cornerRadius="8dp"
+                    app:iconGravity="textStart"
+                    app:iconTint="@color/white"
+                    app:layout_constraintWidth_default="wrap"
+                    tools:targetApi="lollipop" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/keypadButton2"
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    android:text="2"
+                    android:textColor="@color/black"
+                    android:textSize="24sp"
+                    app:cornerRadius="8dp"
+                    app:iconGravity="textStart"
+                    app:iconTint="@color/white"
+                    app:layout_constraintWidth_default="wrap"
+                    tools:targetApi="lollipop" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/keypadButton3"
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    android:text="3"
+                    android:textColor="@color/black"
+                    android:textSize="24sp"
+                    app:cornerRadius="8dp"
+                    app:iconGravity="textStart"
+                    app:iconTint="@color/white"
+                    app:layout_constraintWidth_default="wrap"
+                    tools:targetApi="lollipop" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/keypadButton4"
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    android:text="4"
+                    android:textColor="@color/black"
+                    android:textSize="24sp"
+                    app:cornerRadius="8dp"
+                    app:iconGravity="textStart"
+                    app:iconTint="@color/white"
+                    app:layout_constraintWidth_default="wrap"
+                    tools:targetApi="lollipop" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/keypadButto5"
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    android:text="5"
+                    android:textColor="@color/black"
+                    android:textSize="24sp"
+                    app:cornerRadius="8dp"
+                    app:iconGravity="textStart"
+                    app:iconTint="@color/white"
+                    app:layout_constraintWidth_default="wrap"
+                    tools:targetApi="lollipop" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/keypadButton6"
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    android:text="6"
+                    android:textColor="@color/black"
+                    android:textSize="24sp"
+                    app:cornerRadius="8dp"
+                    app:iconGravity="textStart"
+                    app:iconTint="@color/white"
+                    app:layout_constraintWidth_default="wrap"
+                    tools:targetApi="lollipop" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/keypadButton7"
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    android:text="7"
+                    android:textColor="@color/black"
+                    android:textSize="24sp"
+                    app:cornerRadius="8dp"
+                    app:iconGravity="textStart"
+                    app:iconTint="@color/white"
+                    app:layout_constraintWidth_default="wrap"
+                    tools:targetApi="lollipop" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/keypadButto8"
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    android:text="8"
+                    android:textColor="@color/black"
+                    android:textSize="24sp"
+                    app:cornerRadius="8dp"
+                    app:iconGravity="textStart"
+                    app:iconTint="@color/white"
+                    app:layout_constraintWidth_default="wrap"
+                    tools:targetApi="lollipop" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/keypadButton9"
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    android:text="9"
+                    android:textColor="@color/black"
+                    android:textSize="24sp"
+                    app:cornerRadius="8dp"
+                    app:iconGravity="textStart"
+                    app:iconTint="@color/white"
+                    app:layout_constraintWidth_default="wrap"
+                    tools:targetApi="lollipop" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/keypadButton0"
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    android:text="0"
+                    android:textColor="@color/black"
+                    android:textSize="24sp"
+                    app:cornerRadius="8dp"
+                    app:iconGravity="textStart"
+                    app:iconTint="@color/white"
+                    app:layout_constraintWidth_default="wrap"
+                    tools:targetApi="lollipop" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/keypadButtonX"
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    android:text="x"
+                    android:textColor="@color/black"
+                    android:textSize="24sp"
+                    app:cornerRadius="8dp"
+                    app:iconGravity="textStart"
+                    app:iconTint="@color/white"
+                    app:layout_constraintWidth_default="wrap"
+                    tools:targetApi="lollipop" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/keypadButtonOK"
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    android:text="OK"
+                    android:textColor="@color/black"
+                    android:textSize="24sp"
+                    app:cornerRadius="8dp"
+                    app:iconGravity="textStart"
+                    app:iconTint="@color/white"
+                    app:layout_constraintWidth_default="wrap"
+                    tools:targetApi="lollipop" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
 
@@ -86,5 +308,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:tint="@color/black" />
     </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/sampleHolder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="sample"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
