@@ -149,7 +149,6 @@ class HomeFragment : Fragment() {
         val hashMap: HashMap<String, Any?> = HashMap()
         hashMap["RFID"] = rfidData
         hashMap["time"] = getCurrentTime()
-        hashMap["date"] = getCurrentDate()
 
         try {
             database.getReference("Logs")
