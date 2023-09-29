@@ -1,17 +1,15 @@
-package com.example.easylock.admin.tab
+package com.example.easylock.user
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
 import com.example.easylock.R
-import com.example.easylock.databinding.FragmentHomeBinding
-
+import com.example.easylock.databinding.FragmentUserPinragmentBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -21,36 +19,27 @@ import com.google.firebase.database.ValueEventListener
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
-import java.util.Locale
 import java.util.TimeZone
 
 
-class HomeFragment : Fragment() {
-    private lateinit var binding : FragmentHomeBinding
+class UserPinragment : Fragment() {
+    private lateinit var binding : FragmentUserPinragmentBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var database : FirebaseDatabase
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding =FragmentHomeBinding.inflate(layoutInflater)
         // Inflate the layout for this fragment
+        binding = FragmentUserPinragmentBinding.inflate(layoutInflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
         loadUsersInfo()
-        binding.cardView3.setOnClickListener {
-            auth.signOut()
-            findNavController().apply {
-                popBackStack(R.id.homeFragment, false) // Pop all fragments up to HomeFragment
-                navigate(R.id.loginFragment) // Navigate to LoginFragment
-            }
-        }
         binding.keypadButton0.setOnClickListener {
             binding.etRfid.append("0");
         }
@@ -111,10 +100,11 @@ class HomeFragment : Fragment() {
                         database.getReference("Lock").setValue("Open")
                         Snackbar.make(binding.root, "Door is Open", Snackbar.LENGTH_SHORT).show()
                         uploadInfo2()
+                        uploadInfoMyLogs()
                         // open door lock
                     } else {
                         // PINs don't match, handle accordingly
-                        Toast.makeText(this@HomeFragment.requireContext(),"Pin Not Found Or Empty",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@UserPinragment.requireContext(),"Pin Not Found Or Empty",Toast.LENGTH_SHORT).show()
                     }
                 }
 
@@ -186,5 +176,38 @@ class HomeFragment : Fragment() {
                 }
 
             })
+    }
+    private fun uploadInfoMyLogs() {
+        val rfidData = binding.sampleHolder.text.toString()
+        val timestamp = System.currentTimeMillis()
+
+        val hashMap: HashMap<String, Any?> = HashMap()
+        hashMap["RFID"] = rfidData
+        hashMap["time"] = getCurrentTime()
+
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser != null) {
+            val userUid = currentUser.uid
+
+            try {
+                // Save data under the current user's "MyLogs" node with timestamp as a child node.
+                database.getReference("Users")
+                    .child(userUid)
+                    .child("MyLogs")
+                    .child(timestamp.toString())
+                    .setValue(hashMap)
+                    .addOnCompleteListener { task ->
+                        // Handle completion if needed.
+                    }
+            } catch (e: Exception) {
+                // Handle any exceptions that might occur during the upload process.
+                Toast.makeText(
+                    this.requireContext(),
+                    "Error uploading data: ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+        // Handle the case where the currentUser is null if it can occur in your app.
     }
 }

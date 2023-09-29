@@ -31,7 +31,6 @@ class AccountsAdapter: RecyclerView.Adapter<AccountsAdapter.ViewHolderAccounts> 
     }
 
     inner class ViewHolderAccounts(itemView: View): RecyclerView.ViewHolder(itemView){
-        var name : TextView = binding.tvName
         var moreBtn : ImageButton = binding.btnMore
         var image : ImageView = binding.imgPicture
         var date : TextView = binding.tvDate
@@ -55,7 +54,6 @@ class AccountsAdapter: RecyclerView.Adapter<AccountsAdapter.ViewHolderAccounts> 
         val date = model.currentDate
         val imageselected = model.image
 
-        holder.name.text = id
         holder.id.text = fullname
         holder.date.text = date
         holder.time.text = time

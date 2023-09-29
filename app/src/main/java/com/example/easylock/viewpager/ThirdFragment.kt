@@ -35,7 +35,9 @@ class ThirdFragment : Fragment() {
             binding.progressBar.visibility = View.VISIBLE
             progressDialog.show()
             Handler(Looper.getMainLooper()).postDelayed({
-                findNavController().navigate(R.id.action_viewPagerFragment_to_loginFragment)
+                findNavController().apply {
+                    navigate(R.id.loginFragment) // Navigate to LoginFragment
+                }
                 progressDialog.dismiss()
                 onBoardingFinish()
                 binding.progressBar.visibility = View.INVISIBLE

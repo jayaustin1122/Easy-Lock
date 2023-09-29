@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/white"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".admin.tab.accounts.EditAccountsFragment">
 
     <com.google.android.material.button.MaterialButton
@@ -17,7 +17,7 @@
         android:backgroundTint="@color/blue"
         android:textColor="@color/white"
         android:textStyle="bold"
-        android:text="Update"
+        android:text="Update/Back"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -89,6 +89,7 @@
             android:layout_height="56dp"
             android:fontFamily="@font/regular"
             android:hint="PIN"
+            android:maxLength="4"
             android:inputType="number"
             android:lines="1"
             android:padding="10dp"

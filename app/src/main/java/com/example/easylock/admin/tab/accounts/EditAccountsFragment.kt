@@ -138,7 +138,7 @@ class EditAccountsFragment : Fragment() {
         hashMap["image"] = imgUrl
 
         val dbRef = FirebaseDatabase.getInstance().getReference("Users")
-        dbRef.child(rfid)
+        dbRef.child(FirebaseAuth.getInstance().currentUser!!.uid)
             .updateChildren(hashMap)
             .addOnSuccessListener {
                 progressDialog.dismiss()

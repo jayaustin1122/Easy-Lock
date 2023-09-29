@@ -2,29 +2,20 @@ package com.example.easylock.model
 
 class LogsModel {
 
-        var fullName: String = ""
-        var image: String = ""
-        var currentDate: String = ""
-        var currentTime: String = ""
-        var status: Boolean = true
-        var id: String = ""
+        var RFID : String = ""
+        var date: String = ""
+        var time: String = ""
+
 
         constructor(
-            fullName : String,
-            image : String,
-            currentDate : String,
-            currentTime : String,
-            status : Boolean,
-            id : String
+            RFID : String,
+            date : String,
+            time : String,
         ){
 
-            this.fullName = fullName
-
-            this.image = image
-            this.currentDate = currentDate
-            this.currentTime = currentTime
-            this.status = status
-            this.id = id
+            this.RFID = RFID
+            this.date = date
+            this.time = time
         }
         constructor()
 

@@ -46,9 +46,11 @@ class LogsAdminFragment : Fragment() {
         progressDialog = ProgressDialog(this@LogsAdminFragment.requireContext())
         progressDialog.setTitle("PLease wait")
         progressDialog.setCanceledOnTouchOutside(false)
+        // Initialize userMap here before calling getLogs()
         getLogs()
 
     }
+
 
     private fun getLogs() {
         //initialize
@@ -67,10 +69,12 @@ class LogsAdminFragment : Fragment() {
                     logsArrayList.add(model!!)
                 }
                 //set up adapter
-                adapter = LogsAdapter(this@LogsAdminFragment.requireContext().applicationContext, logsArrayList)
-                //set to recycler
+                adapter = LogsAdapter(this@LogsAdminFragment, logsArrayList)
                 binding.adminEventRv.setHasFixedSize(true)
-                binding.adminEventRv.layoutManager = LinearLayoutManager(context)
+                binding.adminEventRv.layoutManager = LinearLayoutManager(context).apply {
+                    reverseLayout = true
+                    stackFromEnd = true
+                }
                 binding.adminEventRv.adapter = adapter
 
             }

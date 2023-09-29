@@ -1,4 +1,4 @@
-package com.example.easylock.admin.adapter
+package com.example.easylock.user
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,41 +8,41 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.easylock.R
+import com.example.easylock.admin.adapter.AccountsAdapter
 import com.example.easylock.admin.tab.LogsAdminFragment
 import com.example.easylock.databinding.AccountItemRowBinding
 import com.example.easylock.databinding.LogsItemRowBinding
 import com.example.easylock.model.AccountModel
 import com.example.easylock.model.LogsModel
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 
-class LogsAdapter(
-    private val fragment: LogsAdminFragment,
+class MyLogsAdapter(
+    private val fragment: UserFragment,
     private val logsArrayList: ArrayList<LogsModel>
-) : RecyclerView.Adapter<LogsAdapter.ViewHolderLogs>() {
+): RecyclerView.Adapter<MyLogsAdapter.ViewHolderMyLogs>() {
 
 
-
-    inner class ViewHolderLogs(itemView: View): RecyclerView.ViewHolder(itemView){
+    inner class ViewHolderMyLogs(itemView: View): RecyclerView.ViewHolder(itemView){
         var rfid: TextView = itemView.findViewById(R.id.tvID)
         var date: TextView = itemView.findViewById(R.id.tvDate)
         var time: TextView = itemView.findViewById(R.id.textViewNoteTime)
 
     }
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderLogs {
-        val binding = LogsItemRowBinding.inflate(LayoutInflater.from(fragment.requireContext()), parent, false)
-        return ViewHolderLogs(binding.root)
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderMyLogs {
+        val binding = LogsItemRowBinding.inflate(
+            LayoutInflater.from(fragment.requireContext()),
+            parent,
+            false
+        )
+        return ViewHolderMyLogs(binding.root)
     }
 
     override fun getItemCount(): Int {
         return logsArrayList.size
     }
 
-    override fun onBindViewHolder(holder: ViewHolderLogs, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolderMyLogs, position: Int) {
         val model = logsArrayList[position]
         val time = model.time
         val date = model.date

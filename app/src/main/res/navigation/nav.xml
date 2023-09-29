@@ -99,4 +99,19 @@
             android:id="@+id/action_homeFragment_to_loginFragment2"
             app:destination="@id/loginFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/userPinragment"
+        android:name="com.example.easylock.user.UserPinragment"
+        android:label="UserPinragment" />
+    <fragment
+        android:id="@+id/editUserFragment"
+        android:name="com.example.easylock.user.EditUserFragment"
+        android:label="EditUserFragment" >
+        <action
+            android:id="@+id/action_editUserFragment_to_userPinragment"
+            app:destination="@id/userPinragment" />
+        <action
+            android:id="@+id/action_editUserFragment_to_userFragment"
+            app:destination="@id/userFragment" />
+    </fragment>
 </navigation>
