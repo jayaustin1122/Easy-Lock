@@ -24,7 +24,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:fontFamily="@font/bold"
-      android:text="Welcome to Easy Lock.
+      android:text="Welcome to IntelliLock.
  Secure. Simple. Smart."
       android:padding="15dp"
       android:textColor="@color/black"
