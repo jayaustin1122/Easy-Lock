@@ -56,7 +56,12 @@ class EditUserFragment : Fragment() {
         binding.btnUpdate.setOnClickListener{
             updateData()
         }
-
+        binding.btnBack.setOnClickListener {
+            database.getReference("Register").setValue("False")
+            findNavController().apply {
+                navigate(R.id.userFragment) // Navigate to LoginFragment
+            }
+        }
     }
     private fun updateData() {
         //get data

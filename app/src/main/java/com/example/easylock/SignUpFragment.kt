@@ -22,6 +22,11 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -144,22 +149,34 @@ class SignUpFragment : Fragment() {
             else -> createUserAccount()
         }
     }
+
+
+
     private fun createUserAccount() {
+        val email = binding.etEmailSignUp.text.toString()
+        val password = binding.etPasswordSignUp.text.toString()
         progressDialog.setMessage("Creating Account...")
         progressDialog.show()
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                auth.createUserWithEmailAndPassword(email,password).await()
+                withContext(Dispatchers.Main){
+                    getRFIDDataAndUploadImage()
+                }
 
-        auth.createUserWithEmailAndPassword(binding.etEmailSignUp.text.toString().trim(),binding.etPasswordSignUp.text.toString().trim())
+            }
+            catch (e : Exception){
+                withContext(Dispatchers.Main){
+                    progressDialog.dismiss()
+                    Toast.makeText(
+                        this@SignUpFragment.requireContext(),
+                        "Failed Creating Account or ${e.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
 
-            .addOnSuccessListener {
-                // if user successfully created ()
-                getRFIDDataAndUploadImage()
             }
-            .addOnFailureListener { e ->
-                //if the user fialef creating account
-                progressDialog.dismiss()
-                Toast.makeText(this.requireContext(),"Failed Creating Account or ${e.message}",
-                    Toast.LENGTH_SHORT).show()
-            }
+        }
     }
     private fun getRFIDDataAndUploadImage() {
         val uid = auth.uid

@@ -17,7 +17,8 @@
         android:backgroundTint="@color/blue"
         android:textColor="@color/white"
         android:textStyle="bold"
-        android:text="Update/Back"
+        android:text="UPDATE"
+        android:fontFamily="@font/bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -107,29 +108,40 @@
         android:textSize="15sp"
         app:layout_constraintTop_toBottomOf="@+id/tvID" />
 
+
     <TextView
         android:id="@+id/tvID"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:fontFamily="@font/bold"
         android:gravity="center"
         android:text="12346548"
         android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
-
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageView"
-        android:layout_width="317dp"
-        android:layout_height="219dp"
+        android:layout_width="245dp"
+        android:layout_height="205dp"
+        android:layout_marginTop="60dp"
         android:src="@drawable/profile"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/btnBack"
+        android:background="@android:color/transparent"
+        android:scaleType="fitXY"
+        android:layout_margin="10dp"
+        android:src="@drawable/baseline_arrow_back_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/blue" />
 </androidx.constraintlayout.widget.ConstraintLayout>

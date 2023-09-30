@@ -20,6 +20,11 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 
 class LoginFragment : Fragment() {
@@ -96,27 +101,40 @@ class LoginFragment : Fragment() {
             Toast.makeText(this.requireContext(),"Email Invalid", Toast.LENGTH_SHORT).show()
         }
         else if (pass.isEmpty()){
-
+            Toast.makeText(this.requireContext(),"Empty Fields are not allowed", Toast.LENGTH_SHORT).show()
         }
         else{
             loginUser()
         }
     }
-
     private fun loginUser() {
+        val email = binding.etUsernameLogin.text.toString()
+        val password = binding.etPasswordLogin.text.toString()
         progressDialog.setMessage("Logging In...")
         progressDialog.show()
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                auth.signInWithEmailAndPassword(email,password).await()
+                withContext(Dispatchers.Main){
+                    checkUser()
+                }
 
+            }
+            catch (e : Exception){
+                withContext(Dispatchers.Main){
+                    progressDialog.dismiss()
+                    Toast.makeText(
+                        this@LoginFragment.requireContext(),
+                        "Failed Creating Account or ${e.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
 
-        auth.signInWithEmailAndPassword(email,pass)
-            .addOnSuccessListener {
-                checkUser()
             }
-            .addOnFailureListener { e ->
-                progressDialog.dismiss()
-                Toast.makeText(this.requireContext(),"Login Failed due to ${e.message}", Toast.LENGTH_SHORT).show()
-            }
+        }
     }
+
+
 
     private fun checkUser() {
         progressDialog.setTitle("Checking user...")

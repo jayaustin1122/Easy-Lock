@@ -9,8 +9,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.example.easylock.FragmentUtils
 import com.example.easylock.R
 import com.example.easylock.databinding.FragmentEditAccountsBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -78,6 +80,20 @@ class EditAccountsFragment : Fragment() {
             startActivityForResult(intent,1)
 
         }
+        binding.btnBack.setOnClickListener {
+            database.getReference("Register").setValue("False")
+            findNavController().apply {
+                navigate(R.id.accountsFragment) // Navigate to LoginFragment
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().apply {
+                    popBackStack(R.id.editAccountsFragment, false) // Pop all fragments up to HomeFragment
+                    navigate(R.id.accountsFragment) // Navigate to LoginFragment
+                }
+            }
+        })
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -152,4 +168,5 @@ class EditAccountsFragment : Fragment() {
             }
 
     }
+
 }
