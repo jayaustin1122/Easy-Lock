@@ -54,7 +54,15 @@ class LogsAdminFragment : Fragment() {
         // Initialize userMap here before calling getLogs()
         getLogs()
         //search
+        binding.etSearch.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                filterLogs(s.toString().toLowerCase(Locale.ROOT))
+            }
 
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
 
     }
 
@@ -97,6 +105,14 @@ class LogsAdminFragment : Fragment() {
 
 
 
-
+    private fun filterLogs(query: String) {
+        val filteredList = ArrayList<LogsModel>()
+        for (log in logsArrayList) {
+            if (log.RFID.toLowerCase(Locale.ROOT).contains(query)) {
+                filteredList.add(log)
+            }
+        }
+        adapter.updateList(filteredList)
+    }
 
 }

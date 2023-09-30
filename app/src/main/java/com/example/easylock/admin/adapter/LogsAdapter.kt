@@ -74,5 +74,9 @@ class LogsAdapter(
     }
 
 
+    fun updateList(newList: ArrayList<LogsModel>) {
+        logsArrayList = newList
+        notifyDataSetChanged()
+    }
 
 }

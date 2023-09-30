@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".admin.tab.LogsAdminFragment">
 
@@ -28,7 +29,7 @@
         android:layout_marginStart="10dp"
         android:fontFamily="@font/bold"
         android:text="Logs"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="40sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,6 +40,7 @@
         android:id="@+id/card"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.526"
@@ -53,7 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@color/white"
-            android:hint="Search Logs"
+            android:hint="Search By RFID"
             android:fontFamily="@font/bold"
             app:hintTextColor="@color/black"
             app:layout_constraintBottom_toTopOf="@+id/cardView4"
