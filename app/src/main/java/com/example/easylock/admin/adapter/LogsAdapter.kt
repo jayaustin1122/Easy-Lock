@@ -4,6 +4,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -22,9 +24,9 @@ import com.google.firebase.database.ValueEventListener
 
 class LogsAdapter(
     private val fragment: LogsAdminFragment,
-    private val logsArrayList: ArrayList<LogsModel>
-) : RecyclerView.Adapter<LogsAdapter.ViewHolderLogs>() {
+    var logsArrayList: ArrayList<LogsModel>,
 
+) : RecyclerView.Adapter<LogsAdapter.ViewHolderLogs>() {
 
 
     inner class ViewHolderLogs(itemView: View): RecyclerView.ViewHolder(itemView){
@@ -70,6 +72,7 @@ class LogsAdapter(
             }
         })
     }
+
 
 
 }

@@ -75,7 +75,7 @@ class AccountsAdapter: RecyclerView.Adapter<AccountsAdapter.ViewHolderAccounts> 
         val email = model.email
         val pin = model.PIN
         // show options
-        val options = arrayOf("Edit","Delete","Block")
+        val options = arrayOf("Edit","Delete")
         // show alert dialog
         val  builder = AlertDialog.Builder(context)
         builder.setTitle("Choose Option")

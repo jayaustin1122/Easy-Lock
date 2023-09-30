@@ -3,10 +3,13 @@ package com.example.easylock.admin.tab
 
 import android.app.ProgressDialog
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.easylock.R
@@ -20,6 +23,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import java.util.Locale
 
 
 class LogsAdminFragment : Fragment() {
@@ -49,6 +53,8 @@ class LogsAdminFragment : Fragment() {
         progressDialog.setCanceledOnTouchOutside(false)
         // Initialize userMap here before calling getLogs()
         getLogs()
+        //search
+
 
     }
 
@@ -69,6 +75,7 @@ class LogsAdminFragment : Fragment() {
                     // add to array
                     logsArrayList.add(model!!)
                 }
+
                 //set up adapter
                 adapter = LogsAdapter(this@LogsAdminFragment, logsArrayList)
                 binding.adminEventRv.setHasFixedSize(true)
@@ -86,6 +93,10 @@ class LogsAdminFragment : Fragment() {
 
         })
     }
+
+
+
+
 
 
 }
