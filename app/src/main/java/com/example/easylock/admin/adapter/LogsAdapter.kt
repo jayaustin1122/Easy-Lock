@@ -31,7 +31,6 @@ class LogsAdapter(
         var rfid: TextView = itemView.findViewById(R.id.tvID)
         var date: TextView = itemView.findViewById(R.id.tvDate)
         var time: TextView = itemView.findViewById(R.id.textViewNoteTime)
-
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderLogs {
         val binding = LogsItemRowBinding.inflate(LayoutInflater.from(fragment.requireContext()), parent, false)
@@ -50,12 +49,27 @@ class LogsAdapter(
 
         holder.date.text = date
         holder.time.text = time
-        holder.rfid.text = generateRandomNumber()
+        retrieveUserName(rfid, holder.rfid)
     }
-    private fun generateRandomNumber(): String {
-        val random = java.util.Random()
-        val randomNum = random.nextInt(1000000000) + 1000000000 // Ensure 10 digits
-        return randomNum.toString()
+
+    private fun retrieveUserName(rfid: String, textView: TextView) {
+        val dbRef = FirebaseDatabase.getInstance().getReference("Users")
+        dbRef.orderByChild("RFID").equalTo(rfid).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (data in snapshot.children) {
+                    val userModel = data.getValue(AccountModel::class.java)
+                    val userName = userModel?.fullName
+
+                    // Display user name
+                    textView.text = userName
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle error
+            }
+        })
     }
+
 
 }

@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.easylock.R
 import com.example.easylock.admin.adapter.AccountsAdapter
@@ -71,7 +72,7 @@ class LogsAdminFragment : Fragment() {
                 //set up adapter
                 adapter = LogsAdapter(this@LogsAdminFragment, logsArrayList)
                 binding.adminEventRv.setHasFixedSize(true)
-                binding.adminEventRv.layoutManager = LinearLayoutManager(context).apply {
+                binding.adminEventRv.layoutManager = LinearLayoutManager(context,).apply {
                     reverseLayout = true
                     stackFromEnd = true
                 }
