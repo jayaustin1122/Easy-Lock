@@ -1,6 +1,7 @@
 package com.example.easylock
 
 import android.annotation.SuppressLint
+import android.app.Activity.RESULT_OK
 import android.app.ProgressDialog
 import android.content.ContentValues.TAG
 import android.content.Intent
@@ -31,7 +32,6 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.TimeZone
-
 
 class SignUpFragment : Fragment() {
     private lateinit var binding : FragmentSignUpBinding
@@ -115,20 +115,23 @@ class SignUpFragment : Fragment() {
 
 
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (data != null){
-            if (data.data != null){
-                selectedImage = data.data!!
-                binding.imageView2.setImageURI(selectedImage)
+        if (resultCode == RESULT_OK) {
+            if (data != null) {
+                if (data.data != null) {
+                    selectedImage = data.data!!
+                    binding.imageView2.setImageURI(selectedImage)
+                }
             }
         }
     }
     private var email = ""
     private var pass = ""
     private var fullname = ""
-    private var address = ""
+    private var pinCode = ""
     private var userType = "member"
     private var rfidData = ""
     private var pin = ""
@@ -137,15 +140,16 @@ class SignUpFragment : Fragment() {
         val email = binding.etEmailSignUp.text.toString().trim()
         val pass = binding.etPasswordSignUp.text.toString().trim()
         val fullname = binding.etFullname.text.toString().trim()
-        val address = binding.etPasscode.text.toString().trim()
+        val pinCode = binding.etPasscode.text.toString().trim()
         val rfid = binding.etRfid.text.toString().trim()
 
         when {
             email.isEmpty() -> Toast.makeText(this.requireContext(), "Enter Your Email...", Toast.LENGTH_SHORT).show()
             pass.isEmpty() -> Toast.makeText(this.requireContext(), "Enter Your Password...", Toast.LENGTH_SHORT).show()
             fullname.isEmpty() -> Toast.makeText(this.requireContext(), "Enter Your Fullname...", Toast.LENGTH_SHORT).show()
-            address.isEmpty() -> Toast.makeText(this.requireContext(), "Enter Your Address...", Toast.LENGTH_SHORT).show()
+            pinCode.isEmpty() -> Toast.makeText(this.requireContext(), "Enter Your Pin Code...", Toast.LENGTH_SHORT).show()
             rfid.isEmpty()-> Toast.makeText(this.requireContext(),"Tap Your Card",Toast.LENGTH_SHORT).show()
+            !::selectedImage.isInitialized -> Toast.makeText(this.requireContext(),"Please Upload a Picture",Toast.LENGTH_SHORT).show()
             else -> createUserAccount()
         }
     }
@@ -292,13 +296,12 @@ class SignUpFragment : Fragment() {
     private fun uploadInfo2() {
 
         this.rfidData = binding.etRfid.text.toString().trim()
-
-        val timestamp = System.currentTimeMillis()
         val hashMap: HashMap<String, Any?> = HashMap()
         hashMap["$rfidData"] = rfidData
 
         try {
             database.getReference("RegRFID")
+                .child(rfidData)
                 .setValue(hashMap)
                 .addOnCompleteListener { task ->
 
@@ -316,13 +319,12 @@ class SignUpFragment : Fragment() {
     private fun uploadInfo3() {
 
         this.pin = binding.etPasscode.text.toString().trim()
-
-        val timestamp = System.currentTimeMillis()
         val hashMap: HashMap<String, Any?> = HashMap()
         hashMap["$pin"] = pin
 
         try {
             database.getReference("RegPin")
+                .child(pin)
                 .setValue(hashMap)
                 .addOnCompleteListener { task ->
 
