@@ -1,67 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blue"
-    android:padding="30dp">
+    android:background="#FFFFFF">
 
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="0dp"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout6"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="10dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="90dp"
+        android:background="@color/white"
+        android:backgroundTint="@android:color/transparent"
+        android:hint="Pin Code"
+        android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@+id/cardView4"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout6"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etRfid"
             android:layout_width="match_parent"
+            android:layout_height="56dp"
             android:backgroundTint="@android:color/transparent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="@color/white"
-            android:hint="PIN"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toTopOf="@+id/cardView4"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etRfid"
-                android:backgroundTint="@android:color/transparent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="false"
-                android:cursorVisible="false"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:fontFamily="@font/bold"
-                android:inputType="number"
-                android:textAlignment="center"
-                android:lines="1"
-                android:maxLength="4"
-                android:scrollbars="horizontal" />
-        </com.google.android.material.textfield.TextInputLayout>
-    </androidx.cardview.widget.CardView>
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:inputType="numberPassword"
+            android:lines="1"
+            android:maxLength="4"
+            android:scrollbars="horizontal"
+            android:textAlignment="center" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="115dp"
-        app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.5">
 
         <LinearLayout
@@ -246,6 +230,24 @@
                 android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/keypadButtonX"
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    app:icon="@drawable/baseline_backspace_24"
+                    app:iconSize="24dp"
+                    android:fontFamily="@font/bold"
+                    android:textColor="@color/black"
+                    android:textSize="24sp"
+                    app:cornerRadius="8dp"
+                    app:iconGravity="textEnd"
+                    app:iconTint="@color/black"
+                    app:layout_constraintWidth_default="wrap"
+                    tools:targetApi="lollipop"/>
+
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/keypadButton0"
                     android:layout_width="0dp"
                     android:layout_height="80dp"
@@ -263,42 +265,24 @@
                     tools:targetApi="lollipop" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/keypadButtonX"
-                    android:layout_width="0dp"
-                    android:layout_height="80dp"
-                    android:layout_margin="8dp"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/white"
-                    android:text="Del"
-                    android:fontFamily="@font/bold"
-                    android:textColor="@color/black"
-                    android:textSize="24sp"
-                    app:cornerRadius="8dp"
-                    app:iconGravity="textStart"
-                    app:iconTint="@color/white"
-                    app:layout_constraintWidth_default="wrap"
-                    tools:targetApi="lollipop" />
-
-                <com.google.android.material.button.MaterialButton
                     android:id="@+id/keypadButtonOK"
-                    android:layout_width="5dp"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_margin="8dp"
                     android:layout_weight="1"
                     android:backgroundTint="@color/white"
-                    android:text="Done"
                     android:fontFamily="@font/bold"
                     android:textColor="@color/black"
-                    android:textSize="18sp"
+                    android:textSize="24sp"
                     app:cornerRadius="8dp"
-                    app:iconGravity="textStart"
-                    app:iconTint="@color/white"
+                    app:icon="@drawable/baseline_check_24"
+                    app:iconGravity="textEnd"
+                    app:iconSize="36dp"
+                    app:iconTint="@color/black"
                     app:layout_constraintWidth_default="wrap"
                     tools:targetApi="lollipop" />
-
             </LinearLayout>
         </LinearLayout>
-
     </androidx.cardview.widget.CardView>
 
     <TextView
@@ -310,26 +294,55 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="4dp"
-        android:scaleType="fitStart"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.578"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/qwww" />
-
     <ImageButton
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
         android:background="@android:color/transparent"
         android:scaleType="fitXY"
         android:id="@+id/btnBack"
+        android:layout_margin="20dp"
         android:src="@drawable/baseline_arrow_back_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/white" />
+        app:tint="#000000" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/bold"
+        android:text="Pin Code"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_margin="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/bold"
+        android:text="Enter Your Code"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_margin="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="A successful attempt shall open the door for five seconds."
+        android:textColor="#6A6868"
+        android:gravity="center"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView1" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

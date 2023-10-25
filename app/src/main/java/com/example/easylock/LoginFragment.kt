@@ -50,7 +50,7 @@ class LoginFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
         progressDialog = ProgressDialog(this.requireContext())
-        progressDialog.setTitle("PLease wait")
+        progressDialog.setTitle("Please wait")
         progressDialog.setCanceledOnTouchOutside(false)
         handler.postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
         binding.tvCreate.setOnClickListener {

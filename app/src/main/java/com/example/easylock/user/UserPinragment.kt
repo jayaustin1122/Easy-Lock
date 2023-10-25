@@ -81,6 +81,11 @@ class UserPinragment : Fragment() {
         binding.keypadButtonOK.setOnClickListener {
             getPinToUsers()
         }
+        binding.btnBack.setOnClickListener {
+            findNavController().apply {
+                navigate(R.id.userFragment) // Navigate to LoginFragment
+            }
+        }
     }
 
     private fun getPinToUsers() {
@@ -139,7 +144,7 @@ class UserPinragment : Fragment() {
         val hashMap: HashMap<String, Any?> = HashMap()
         hashMap["RFID"] = rfidData
         hashMap["time"] = getCurrentTime()
-
+        hashMap["date"] = getCurrentDate()
         try {
             database.getReference("Logs")
                 .child(timestamp.toString())

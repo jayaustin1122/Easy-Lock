@@ -47,7 +47,7 @@ class EditUserFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         auth = FirebaseAuth.getInstance()
         progressDialog = ProgressDialog(this.requireContext())
-        progressDialog.setTitle("PLease wait")
+        progressDialog.setTitle("Please wait")
         progressDialog.setCanceledOnTouchOutside(false)
         storage = FirebaseStorage.getInstance()
         database = FirebaseDatabase.getInstance()
