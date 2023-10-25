@@ -89,6 +89,9 @@ class SignUpFragment : Fragment() {
                     if (rfidData == "K"){
                         binding.etRfid.setText("E3 8B 45 96")
                     }
+                    else{
+                        binding.etRfid.setText("RFID Not Found or Damage")
+                    }
 
                 } else {
                     // Handle the case where RFID data is not available
