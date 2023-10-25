@@ -68,7 +68,28 @@ class SignUpFragment : Fragment() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val rfidData = dataSnapshot.getValue(String::class.java)
                 if (rfidData != null) {
-                    binding.etRfid.setText(rfidData)
+                    if (rfidData == "E"){
+                        binding.etRfid.setText("E0 83 E2 19")
+                    }
+                    if (rfidData == "F"){
+                        binding.etRfid.setText("03 59 42 2F")
+                    }
+                    if (rfidData == "G"){
+                        binding.etRfid.setText("E3 57 45 96")
+                    }
+                    if (rfidData == "H"){
+                        binding.etRfid.setText("43 7F 49 96")
+                    }
+                    if (rfidData == "I"){
+                        binding.etRfid.setText("63 46 46 96")
+                    }
+                    if (rfidData == "J"){
+                        binding.etRfid.setText("23 1F 37 96")
+                    }
+                    if (rfidData == "K"){
+                        binding.etRfid.setText("E3 8B 45 96")
+                    }
+
                 } else {
                     // Handle the case where RFID data is not available
                     Toast.makeText(this@SignUpFragment.requireContext(), "RFID data not found", Toast.LENGTH_SHORT).show()
@@ -324,7 +345,6 @@ class SignUpFragment : Fragment() {
 
         try {
             database.getReference("RegPin")
-                .child(pin)
                 .setValue(hashMap)
                 .addOnCompleteListener { task ->
 
