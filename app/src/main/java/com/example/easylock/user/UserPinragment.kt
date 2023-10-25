@@ -81,6 +81,11 @@ class UserPinragment : Fragment() {
         binding.keypadButtonOK.setOnClickListener {
             getPinToUsers()
         }
+        binding.btnBack.setOnClickListener {
+            findNavController().apply {
+                navigate(R.id.userFragment) // Navigate to LoginFragment
+            }
+        }
     }
 
     private fun getPinToUsers() {

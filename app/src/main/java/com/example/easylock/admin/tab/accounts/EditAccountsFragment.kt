@@ -50,7 +50,8 @@ class EditAccountsFragment : Fragment() {
         progressDialog = ProgressDialog(this@EditAccountsFragment.requireContext())
         progressDialog.setTitle("PLease wait")
         progressDialog.setCanceledOnTouchOutside(false)
-
+        storage = FirebaseStorage.getInstance()
+        database = FirebaseDatabase.getInstance()
         //get id to edit events
         rfid = arguments?.getString("id").toString()
         fullname = arguments?.getString("fullname").toString()

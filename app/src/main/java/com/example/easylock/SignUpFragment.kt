@@ -91,7 +91,7 @@ class SignUpFragment : Fragment() {
         database = FirebaseDatabase.getInstance()
 
         progressDialog = ProgressDialog(this.requireContext())
-        progressDialog.setTitle("PLease wait")
+        progressDialog.setTitle("Please wait")
         progressDialog.setCanceledOnTouchOutside(false)
         handler.post(fetchRFIDDataRunnable)
         binding.imageView2.setOnClickListener {
@@ -146,7 +146,7 @@ class SignUpFragment : Fragment() {
         when {
             email.isEmpty() -> Toast.makeText(this.requireContext(), "Enter Your Email...", Toast.LENGTH_SHORT).show()
             pass.isEmpty() -> Toast.makeText(this.requireContext(), "Enter Your Password...", Toast.LENGTH_SHORT).show()
-            fullname.isEmpty() -> Toast.makeText(this.requireContext(), "Enter Your Fullname...", Toast.LENGTH_SHORT).show()
+            fullname.isEmpty() -> Toast.makeText(this.requireContext(), "Enter Your Name...", Toast.LENGTH_SHORT).show()
             pinCode.isEmpty() -> Toast.makeText(this.requireContext(), "Enter Your Pin Code...", Toast.LENGTH_SHORT).show()
             rfid.isEmpty()-> Toast.makeText(this.requireContext(),"Tap Your Card",Toast.LENGTH_SHORT).show()
             !::selectedImage.isInitialized -> Toast.makeText(this.requireContext(),"Please Upload a Picture",Toast.LENGTH_SHORT).show()
