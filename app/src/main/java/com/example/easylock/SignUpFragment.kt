@@ -63,7 +63,6 @@ class SignUpFragment : Fragment() {
     private fun getRFIDData() {
         val uid = auth.uid
         val userRef = database.getReference("RFID") // Change to your actual path
-
         userRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val rfidData = dataSnapshot.getValue(String::class.java)
@@ -89,16 +88,11 @@ class SignUpFragment : Fragment() {
                     if (rfidData == "K"){
                         binding.etRfid.setText("E3 8B 45 96")
                     }
-                    else{
-                        binding.etRfid.setText("RFID Not Found or Damage")
-                    }
-
                 } else {
                     // Handle the case where RFID data is not available
                     Toast.makeText(this@SignUpFragment.requireContext(), "RFID data not found", Toast.LENGTH_SHORT).show()
                 }
             }
-
             override fun onCancelled(databaseError: DatabaseError) {
                 Log.w(TAG, "getRFIDData:onCancelled", databaseError.toException())
                 // Handle the case where an error occurred while retrieving RFID data
@@ -106,14 +100,12 @@ class SignUpFragment : Fragment() {
             }
         })
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //init
         auth = FirebaseAuth.getInstance()
         storage = FirebaseStorage.getInstance()
         database = FirebaseDatabase.getInstance()
-
         progressDialog = ProgressDialog(this.requireContext())
         progressDialog.setTitle("Please wait")
         progressDialog.setCanceledOnTouchOutside(false)
@@ -132,17 +124,11 @@ class SignUpFragment : Fragment() {
         }
         binding.btnSignUp.setOnClickListener {
             validateData()
-
         }
-
     }
-
-
-
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if (resultCode == RESULT_OK) {
             if (data != null) {
                 if (data.data != null) {
@@ -159,14 +145,12 @@ class SignUpFragment : Fragment() {
     private var userType = "member"
     private var rfidData = ""
     private var pin = ""
-
     private fun validateData() {
         val email = binding.etEmailSignUp.text.toString().trim()
         val pass = binding.etPasswordSignUp.text.toString().trim()
         val fullname = binding.etFullname.text.toString().trim()
         val pinCode = binding.etPasscode.text.toString().trim()
         val rfid = binding.etRfid.text.toString().trim()
-
         when {
             email.isEmpty() -> Toast.makeText(this.requireContext(), "Enter Your Email...", Toast.LENGTH_SHORT).show()
             pass.isEmpty() -> Toast.makeText(this.requireContext(), "Enter Your Password...", Toast.LENGTH_SHORT).show()
@@ -174,12 +158,28 @@ class SignUpFragment : Fragment() {
             pinCode.isEmpty() -> Toast.makeText(this.requireContext(), "Enter Your Pin Code...", Toast.LENGTH_SHORT).show()
             rfid.isEmpty()-> Toast.makeText(this.requireContext(),"Tap Your Card",Toast.LENGTH_SHORT).show()
             !::selectedImage.isInitialized -> Toast.makeText(this.requireContext(),"Please Upload a Picture",Toast.LENGTH_SHORT).show()
-            else -> createUserAccount()
+            else -> checkpin()
         }
     }
-
-
-
+    fun checkpin(){
+        val pinCode = binding.etPasscode.text.toString().trim()
+        // Check if the PIN is already in use
+        val pinRef = database.getReference("RegPin").child(pinCode)
+        pinRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Toast.makeText(this@SignUpFragment.requireContext(), "PIN is already in use", Toast.LENGTH_SHORT).show()
+                } else {
+                    // Proceed with account creation
+                    createUserAccount()
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.w(TAG, "validateData:onCancelled", databaseError.toException())
+                Toast.makeText(this@SignUpFragment.requireContext(), "Error checking PIN availability", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
     private fun createUserAccount() {
         val email = binding.etEmailSignUp.text.toString()
         val password = binding.etPasswordSignUp.text.toString()
@@ -191,7 +191,6 @@ class SignUpFragment : Fragment() {
                 withContext(Dispatchers.Main){
                     getRFIDDataAndUploadImage()
                 }
-
             }
             catch (e : Exception){
                 withContext(Dispatchers.Main){
@@ -202,7 +201,6 @@ class SignUpFragment : Fragment() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-
             }
         }
     }
@@ -220,7 +218,6 @@ class SignUpFragment : Fragment() {
                     Toast.makeText(this@SignUpFragment.requireContext(), "RFID data not found", Toast.LENGTH_SHORT).show()
                 }
             }
-
             override fun onCancelled(databaseError: DatabaseError) {
                 Log.w(TAG, "getRFIDData:onCancelled", databaseError.toException())
                 // Handle the case where an error occurred while retrieving RFID data
@@ -228,7 +225,6 @@ class SignUpFragment : Fragment() {
             }
         })
     }
-
     private fun uploadImage(rfidData: String) {
         progressDialog.setMessage("Uploading Image...")
         progressDialog.show()
@@ -263,7 +259,6 @@ class SignUpFragment : Fragment() {
     val uid = auth.uid
     val timestamp = System.currentTimeMillis()
     val hashMap : HashMap<String, Any?> = HashMap()
-
     hashMap["uid"] = uid
     hashMap["email"] = email
     hashMap["password"] = pass
@@ -276,7 +271,6 @@ class SignUpFragment : Fragment() {
     hashMap["RFID"] = rfidData
     hashMap["PIN"] = pin
     hashMap["status"] = true
-
     try {
         database.getReference("Users")
             .child(FirebaseAuth.getInstance().currentUser!!.uid)
@@ -309,8 +303,6 @@ class SignUpFragment : Fragment() {
         val minutes = String.format("%02d", c.get(Calendar.MINUTE))
         return "$hours:$minutes"
     }
-
-
     @SuppressLint("SimpleDateFormat")
     private fun getCurrentDate(): String {
         val currentDateObject = Date()
@@ -318,24 +310,68 @@ class SignUpFragment : Fragment() {
         return formatter.format(currentDateObject)
     }
     private fun uploadInfo2() {
-
         this.rfidData = binding.etRfid.text.toString().trim()
         val hashMap: HashMap<String, Any?> = HashMap()
-        hashMap["$rfidData"] = rfidData
-
+        if (rfidData == "E0 83 E2 19"){
+            hashMap["E"] = "E"
+        }
+        if (rfidData == "03 59 42 2F"){
+            hashMap["F"] = "F"
+        }
+        if (rfidData == "E3 57 45 96"){
+            hashMap["G"] = "G"
+        }
+        if (rfidData == "43 7F 49 96"){
+            hashMap["H"] = "H"
+        }
+        if (rfidData == "63 46 46 96"){
+            hashMap["I"] = "I"
+        }
+        if (rfidData == "23 1F 37 96"){
+            hashMap["J"] = "J"
+        }
+        if (rfidData == "E3 8B 45 96"){
+            hashMap["K"] = "K"
+        }
         try {
-            database.getReference("RegRFID")
-                .child(rfidData)
-                .setValue(hashMap)
-                .addOnCompleteListener { task ->
+            // Retrieve existing data
+            database.getReference("RegRFID").addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        val existingData = dataSnapshot.getValue() as HashMap<String, Any?>
 
+                        // Merge existing data with new data
+                        existingData.putAll(hashMap)
+
+                        // Update the database with the merged data
+                        database.getReference("RegRFID")
+                            .setValue(existingData)
+                            .addOnCompleteListener { task ->
+                                // Handle completion if needed
+                            }
+                    } else {
+                        // If no existing data, simply add the new data
+                        database.getReference("RegRFID")
+                            .setValue(hashMap)
+                            .addOnCompleteListener { task ->
+                                // Handle completion if needed
+                            }
+                    }
                 }
+                override fun onCancelled(databaseError: DatabaseError) {
+                    progressDialog.dismiss()
+                    Toast.makeText(
+                        this@SignUpFragment.requireContext(),
+                        "Error retrieving existing data: ${databaseError.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            })
         } catch (e: Exception) {
-            // Handle any exceptions that might occur during the upload process.
             progressDialog.dismiss()
             Toast.makeText(
                 this.requireContext(),
-                "Error uploading data: ${e.message}",
+                "Error appending data: ${e.message}",
                 Toast.LENGTH_SHORT
             ).show()
         }
@@ -347,28 +383,53 @@ class SignUpFragment : Fragment() {
         hashMap["$pin"] = pin
 
         try {
-            database.getReference("RegPin")
-                .setValue(hashMap)
-                .addOnCompleteListener { task ->
+            // Retrieve existing data
+            database.getReference("RegPin").addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        val existingData = dataSnapshot.getValue() as HashMap<String, Any?>
 
+                        // Merge existing data with new data
+                        existingData.putAll(hashMap)
+
+                        // Update the database with the merged data
+                        database.getReference("RegPin")
+                            .setValue(existingData)
+                            .addOnCompleteListener { task ->
+                                // Handle completion if needed
+                            }
+                    } else {
+                        // If no existing data, simply add the new data
+                        database.getReference("RegPin")
+                            .setValue(hashMap)
+                            .addOnCompleteListener { task ->
+                                // Handle completion if needed
+                            }
+                    }
                 }
+                override fun onCancelled(databaseError: DatabaseError) {
+                    progressDialog.dismiss()
+                    Toast.makeText(
+                        this@SignUpFragment.requireContext(),
+                        "Error retrieving existing data: ${databaseError.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            })
+
         } catch (e: Exception) {
-            // Handle any exceptions that might occur during the upload process.
             progressDialog.dismiss()
             Toast.makeText(
                 this.requireContext(),
-                "Error uploading data: ${e.message}",
+                "Error appending data: ${e.message}",
                 Toast.LENGTH_SHORT
             ).show()
         }
     }
-
-
     override fun onResume() {
         super.onResume()
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
-
     override fun onPause() {
         callback.remove()
         super.onPause()
@@ -377,10 +438,5 @@ class SignUpFragment : Fragment() {
         override fun handleOnBackPressed() {
             database.getReference("Register").setValue("False")
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
     }
 }
