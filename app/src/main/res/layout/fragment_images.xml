@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@android:color/transparent"
         android:background="@color/white"
-        android:hint="Search By RFID"
+        android:hint="Search By Date or Time"
         android:layout_marginVertical="20dp"
         android:fontFamily="@font/bold"
         app:hintTextColor="@color/black"
