@@ -62,39 +62,16 @@ class SignUpFragment : Fragment() {
     }
     private fun getRFIDData() {
         val uid = auth.uid
-        val userRef = database.getReference("RFID") // Change to your actual path
+        val userRef = database.getReference("RFID")
 
         userRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val rfidData = dataSnapshot.getValue(String::class.java)
                 if (rfidData != null) {
-                    if (rfidData == "E"){
-                        binding.etRfid.setText("E0 83 E2 19")
-                    }
-                    if (rfidData == "F"){
-                        binding.etRfid.setText("03 59 42 2F")
-                    }
-                    if (rfidData == "G"){
-                        binding.etRfid.setText("E3 57 45 96")
-                    }
-                    if (rfidData == "H"){
-                        binding.etRfid.setText("43 7F 49 96")
-                    }
-                    if (rfidData == "I"){
-                        binding.etRfid.setText("63 46 46 96")
-                    }
-                    if (rfidData == "J"){
-                        binding.etRfid.setText("23 1F 37 96")
-                    }
-                    if (rfidData == "K"){
-                        binding.etRfid.setText("E3 8B 45 96")
-                    }
-                    else{
-                        binding.etRfid.setText("RFID Not Found or Damage")
-                    }
-
+                    binding.etRfid.setText(rfidData)
                 } else {
                     // Handle the case where RFID data is not available
+                    binding.etRfid.setText("RFID Not Found or Damage")
                     Toast.makeText(this@SignUpFragment.requireContext(), "RFID data not found", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -102,10 +79,12 @@ class SignUpFragment : Fragment() {
             override fun onCancelled(databaseError: DatabaseError) {
                 Log.w(TAG, "getRFIDData:onCancelled", databaseError.toException())
                 // Handle the case where an error occurred while retrieving RFID data
+                binding.etRfid.setText("RFID Not Found or Damage")
                 Toast.makeText(this@SignUpFragment.requireContext(), "Error retrieving RFID data", Toast.LENGTH_SHORT).show()
             }
         })
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

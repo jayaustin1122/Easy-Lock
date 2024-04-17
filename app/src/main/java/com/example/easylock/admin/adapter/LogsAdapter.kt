@@ -1,5 +1,6 @@
 package com.example.easylock.admin.adapter
 
+import LogsAdminFragment
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +13,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.easylock.R
-import com.example.easylock.admin.tab.LogsAdminFragment
+import com.example.easylock.admin.logs.LogsFragment
 import com.example.easylock.databinding.AccountItemRowBinding
 import com.example.easylock.databinding.LogsItemRowBinding
 import com.example.easylock.model.AccountModel
@@ -23,7 +24,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 class LogsAdapter(
-    private val fragment: LogsAdminFragment,
+    private val fragment: LogsFragment,
     var logsArrayList: ArrayList<LogsModel>,
 
 ) : RecyclerView.Adapter<LogsAdapter.ViewHolderLogs>() {

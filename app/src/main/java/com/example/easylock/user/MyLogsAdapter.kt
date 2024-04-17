@@ -10,7 +10,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.easylock.R
 import com.example.easylock.admin.adapter.AccountsAdapter
-import com.example.easylock.admin.tab.LogsAdminFragment
 import com.example.easylock.databinding.AccountItemRowBinding
 import com.example.easylock.databinding.LogsItemRowBinding
 import com.example.easylock.databinding.LogsItemRowUserBinding

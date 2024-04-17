@@ -1,14 +1,14 @@
 {
   "project_info": {
-    "project_number": "242120684856",
-    "firebase_url": "https://easy-lock-c505a-default-rtdb.firebaseio.com",
-    "project_id": "easy-lock-c505a",
-    "storage_bucket": "easy-lock-c505a.appspot.com"
+    "project_number": "396204497428",
+    "firebase_url": "https://intellilock-e95c6-default-rtdb.firebaseio.com",
+    "project_id": "intellilock-e95c6",
+    "storage_bucket": "intellilock-e95c6.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:242120684856:android:eb7ef3e403ba8dd0b33dcd",
+        "mobilesdk_app_id": "1:396204497428:android:62e2fdcafd89f87d8d6501",
         "android_client_info": {
           "package_name": "com.example.easylock"
         }
@@ -16,7 +16,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAFuFi70wlQkCtca3HojZmSpQV_2ShSlfE"
+          "current_key": "AIzaSyAI3DxQkz79b-Q7g0fv7kzN9M9iECd9jJM"
         }
       ],
       "services": {
